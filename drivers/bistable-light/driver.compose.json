@@ -1,0 +1,29 @@
+{
+  "id": "bistable-light",
+  "name": {
+    "en": "DALI Bistable Light",
+    "ko": "DALI 스위치 조명"
+  },
+  "class": "light",
+  "capabilities": [
+    "onoff"
+  ],
+  "images": {
+    "small": "/drivers/bistable-light/assets/images/small.png",
+    "large": "/drivers/bistable-light/assets/images/large.png",
+    "xlarge": "/drivers/bistable-light/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

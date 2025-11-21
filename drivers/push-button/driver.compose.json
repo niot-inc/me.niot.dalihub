@@ -1,0 +1,27 @@
+{
+  "id": "push-button",
+  "name": {
+    "en": "DALI Push Button",
+    "ko": "DALI 푸시 버튼"
+  },
+  "class": "button",
+  "capabilities": [],
+  "images": {
+    "small": "/drivers/push-button/assets/images/small.png",
+    "large": "/drivers/push-button/assets/images/large.png",
+    "xlarge": "/drivers/push-button/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

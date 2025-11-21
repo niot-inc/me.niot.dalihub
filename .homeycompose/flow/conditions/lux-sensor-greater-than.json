@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Luminance is greater than",
+    "ko": "조도가 더 크면"
+  },
+  "titleFormatted": {
+    "en": "Luminance is greater than [[lux]] lx",
+    "ko": "조도가 [[lux]] lx보다 크면"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=lux-sensor"
+    },
+    {
+      "type": "number",
+      "name": "lux",
+      "min": 0,
+      "max": 100000,
+      "step": 1,
+      "placeholder": {
+        "en": "Lux value",
+        "ko": "조도 값"
+      }
+    }
+  ]
+}

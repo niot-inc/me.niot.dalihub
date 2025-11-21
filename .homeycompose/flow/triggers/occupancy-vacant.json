@@ -1,0 +1,13 @@
+{
+  "title": {
+    "en": "Vacant",
+    "ko": "비어있음"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=occupancy-sensor"
+    }
+  ]
+}

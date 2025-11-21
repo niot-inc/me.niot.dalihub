@@ -1,0 +1,13 @@
+{
+  "title": {
+    "en": "Occupied, no movement",
+    "ko": "점유 중, 움직임 없음"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=occupancy-sensor"
+    }
+  ]
+}

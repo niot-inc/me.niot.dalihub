@@ -1,0 +1,13 @@
+{
+  "title": {
+    "en": "Movement is !{{detected|not detected}}",
+    "ko": "움직임이 !{{감지됨|감지 안됨}}"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=occupancy-sensor"
+    }
+  ]
+}

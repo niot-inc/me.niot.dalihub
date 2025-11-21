@@ -1,0 +1,27 @@
+{
+  "id": "lux-sensor",
+  "name": {
+    "en": "DALI Lux Sensor",
+    "ko": "DALI 조도 센서"
+  },
+  "class": "sensor",
+  "capabilities": [],
+  "images": {
+    "small": "/drivers/lux-sensor/assets/images/small.png",
+    "large": "/drivers/lux-sensor/assets/images/large.png",
+    "xlarge": "/drivers/lux-sensor/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

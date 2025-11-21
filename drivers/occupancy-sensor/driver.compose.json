@@ -1,0 +1,27 @@
+{
+  "id": "occupancy-sensor",
+  "name": {
+    "en": "DALI Occupancy Sensor",
+    "ko": "DALI 점유 센서"
+  },
+  "class": "sensor",
+  "capabilities": [],
+  "images": {
+    "small": "/drivers/occupancy-sensor/assets/images/small.png",
+    "large": "/drivers/occupancy-sensor/assets/images/large.png",
+    "xlarge": "/drivers/occupancy-sensor/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

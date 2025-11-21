@@ -1,0 +1,30 @@
+{
+  "id": "dimmable-light",
+  "name": {
+    "en": "DALI Dimmable Light",
+    "ko": "DALI 디밍 조명"
+  },
+  "class": "light",
+  "capabilities": [
+    "onoff",
+    "dim"
+  ],
+  "images": {
+    "small": "/drivers/dimmable-light/assets/images/small.png",
+    "large": "/drivers/dimmable-light/assets/images/large.png",
+    "xlarge": "/drivers/dimmable-light/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

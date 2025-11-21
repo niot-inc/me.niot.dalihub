@@ -1,0 +1,30 @@
+{
+  "id": "light-group",
+  "name": {
+    "en": "DALI Light Group",
+    "ko": "DALI 조명 그룹"
+  },
+  "class": "light",
+  "capabilities": [
+    "onoff",
+    "dim"
+  ],
+  "images": {
+    "small": "/drivers/light-group/assets/images/small.png",
+    "large": "/drivers/light-group/assets/images/large.png",
+    "xlarge": "/drivers/light-group/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

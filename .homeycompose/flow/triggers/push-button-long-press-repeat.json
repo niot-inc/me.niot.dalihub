@@ -1,0 +1,12 @@
+{
+  "title": {
+    "en": "Button long press repeating"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=push-button"
+    }
+  ]
+}

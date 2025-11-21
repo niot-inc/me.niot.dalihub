@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+</head>
+
+<body>
+  <header class="homey-header">
+    <h1 class="homey-title">DALIHub Settings</h1>
+    <p class="homey-subtitle">Configure your DALI Hub connection</p>
+  </header>
+
+  <fieldset class="homey-form-fieldset">
+    <legend class="homey-form-legend">DALI Hub Server Details</legend>
+
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="server_url">Server Address (IP:Port)</label>
+      <input class="homey-form-input" id="server_url" type="text" value="" placeholder="192.168.1.53:3000" />
+      <p class="homey-form-description">Enter the IP address and port of your DALI Hub server. Port defaults to 3000 if not specified (e.g., 192.168.1.53:3000 or 192.168.1.53)</p>
+    </div>
+  </fieldset>
+
+  <button id="save" class="homey-button-primary-full">Save changes</button>
+
+  <script type="text/javascript">
+    function onHomeyReady(Homey) {
+      Homey.ready();
+
+      var serverUrlElement = document.getElementById("server_url");
+      var saveElement = document.getElementById("save");
+
+      // Load current server_url setting
+      Homey.get("server_url", function (err, server) {
+        if (err) return Homey.alert(err);
+        if (server) {
+          serverUrlElement.value = server;
+        }
+      });
+
+      // Save button click handler
+      saveElement.addEventListener("click", function (e) {
+        var serverUrl = serverUrlElement.value.trim();
+
+        if (!serverUrl) {
+          return Homey.alert("Please enter a server address");
+        }
+
+        Homey.set("server_url", serverUrl, function (err) {
+          if (err) return Homey.alert(err);
+          Homey.alert("Settings saved successfully!");
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>
