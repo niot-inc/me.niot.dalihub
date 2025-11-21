@@ -48,8 +48,12 @@ class LightGroupDevice extends Homey.Device {
 
     if (value) {
       await client.setGroupOn(this.busId, this.groupId);
+      // Update dim to 100% when turning on
+      await this.setCapabilityValue('dim', 1.0).catch(this.error);
     } else {
       await client.setGroupOff(this.busId, this.groupId);
+      // Update dim to 0% when turning off
+      await this.setCapabilityValue('dim', 0).catch(this.error);
     }
   }
 

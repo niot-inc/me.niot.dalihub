@@ -48,8 +48,12 @@ class DimmableLightDevice extends Homey.Device {
 
     if (value) {
       await client.setLightOn(this.busId, this.address);
+      // Update dim to 100% when turning on
+      await this.setCapabilityValue('dim', 1.0).catch(this.error);
     } else {
       await client.setLightOff(this.busId, this.address);
+      // Update dim to 0% when turning off
+      await this.setCapabilityValue('dim', 0).catch(this.error);
     }
   }
 
