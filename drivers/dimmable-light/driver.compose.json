@@ -9,6 +9,12 @@
     "onoff",
     "dim"
   ],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
   "images": {
     "small": "/drivers/dimmable-light/assets/images/small.png",
     "large": "/drivers/dimmable-light/assets/images/large.png",

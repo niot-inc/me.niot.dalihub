@@ -19,6 +19,14 @@
   "category": [
     "lights"
   ],
+  "tags": {
+    "en": [
+      "DALI"
+    ],
+    "ko": [
+      "DALI"
+    ]
+  },
   "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
@@ -26,9 +34,10 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "Wonshik Kim",
-    "email": "wonshikkim.kr@gmail.com"
+    "name": "nIoT Inc.",
+    "email": "support@niot.me"
   },
+  "support": "mailto:support@niot.me",
   "flow": {
     "triggers": [
       {
@@ -145,6 +154,10 @@
           {
             "type": "number",
             "name": "lux",
+            "title": {
+              "en": "Lux value",
+              "ko": "조도 값"
+            },
             "min": 0,
             "max": 100000,
             "step": 1,
@@ -174,6 +187,10 @@
           {
             "type": "number",
             "name": "lux",
+            "title": {
+              "en": "Lux value",
+              "ko": "조도 값"
+            },
             "min": 0,
             "max": 100000,
             "step": 1,
@@ -240,6 +257,12 @@
       "capabilities": [
         "onoff"
       ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "images": {
         "small": "/drivers/bistable-light/assets/images/small.png",
         "large": "/drivers/bistable-light/assets/images/large.png",
@@ -269,6 +292,12 @@
       "capabilities": [
         "onoff",
         "dim"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
       ],
       "images": {
         "small": "/drivers/dimmable-light/assets/images/small.png",
@@ -300,6 +329,12 @@
         "onoff",
         "dim"
       ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "images": {
         "small": "/drivers/light-group/assets/images/small.png",
         "large": "/drivers/light-group/assets/images/large.png",
@@ -327,6 +362,12 @@
       },
       "class": "sensor",
       "capabilities": [],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "images": {
         "small": "/drivers/lux-sensor/assets/images/small.png",
         "large": "/drivers/lux-sensor/assets/images/large.png",
@@ -354,6 +395,12 @@
       },
       "class": "sensor",
       "capabilities": [],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "images": {
         "small": "/drivers/occupancy-sensor/assets/images/small.png",
         "large": "/drivers/occupancy-sensor/assets/images/large.png",
@@ -381,6 +428,12 @@
       },
       "class": "button",
       "capabilities": [],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
       "images": {
         "small": "/drivers/push-button/assets/images/small.png",
         "large": "/drivers/push-button/assets/images/large.png",

@@ -16,6 +16,10 @@
     {
       "type": "number",
       "name": "lux",
+      "title": {
+        "en": "Lux value",
+        "ko": "조도 값"
+      },
       "min": 0,
       "max": 100000,
       "step": 1,

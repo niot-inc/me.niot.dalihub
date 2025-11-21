@@ -6,6 +6,12 @@
   },
   "class": "sensor",
   "capabilities": [],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
   "images": {
     "small": "/drivers/lux-sensor/assets/images/small.png",
     "large": "/drivers/lux-sensor/assets/images/large.png",

@@ -6,6 +6,12 @@
   },
   "class": "button",
   "capabilities": [],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
   "images": {
     "small": "/drivers/push-button/assets/images/small.png",
     "large": "/drivers/push-button/assets/images/large.png",

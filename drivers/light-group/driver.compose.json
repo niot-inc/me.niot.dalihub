@@ -9,6 +9,12 @@
     "onoff",
     "dim"
   ],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
   "images": {
     "small": "/drivers/light-group/assets/images/small.png",
     "large": "/drivers/light-group/assets/images/large.png",

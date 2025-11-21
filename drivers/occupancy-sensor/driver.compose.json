@@ -6,6 +6,12 @@
   },
   "class": "sensor",
   "capabilities": [],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
   "images": {
     "small": "/drivers/occupancy-sensor/assets/images/small.png",
     "large": "/drivers/occupancy-sensor/assets/images/large.png",

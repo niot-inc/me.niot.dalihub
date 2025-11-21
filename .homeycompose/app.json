@@ -18,6 +18,14 @@
   "category": [
     "lights"
   ],
+  "tags": {
+    "en": [
+      "DALI"
+    ],
+    "ko": [
+      "DALI"
+    ]
+  },
   "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
@@ -25,7 +33,8 @@
     "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
-    "name": "Wonshik Kim",
-    "email": "wonshikkim.kr@gmail.com"
-  }
+    "name": "nIoT Inc.",
+    "email": "support@niot.me"
+  },
+  "support": "mailto:support@niot.me"
 }
