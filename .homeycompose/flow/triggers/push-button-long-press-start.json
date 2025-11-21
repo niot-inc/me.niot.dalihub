@@ -1,6 +1,7 @@
 {
   "title": {
-    "en": "Button long press started"
+    "en": "Button long press started",
+    "ko": "버튼 길게 누르기 시작"
   },
   "args": [
     {

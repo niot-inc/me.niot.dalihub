@@ -1,6 +1,7 @@
 {
   "title": {
-    "en": "Button short pressed"
+    "en": "Button short pressed",
+    "ko": "버튼 짧게 누름"
   },
   "args": [
     {
