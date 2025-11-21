@@ -27,12 +27,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Update Homey App Version
-        uses: athombv/github-action-homey-app-version@master
-        id: update_app_version
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          version: ${{ inputs.version }}
-          changelog: ${{ inputs.changelog }}
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # - name: Update Homey App Version
+      #   uses: athombv/github-action-homey-app-version@master
+      #   id: update_app_version
+      #   with:
+      #     version: ${{ inputs.version }}
+      #     changelog: ${{ inputs.changelog }}
+
+      - name: Update Homey App Version
+        id: update_app_version
+        run: |
+          npx --yes homey app version ${{ inputs.version }} --changelog "${{ inputs.changelog }}"
+          NEW_VERSION=$(node -p "require('./app.json').version")
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Commit & Push
         run: |

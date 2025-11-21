@@ -9,11 +9,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Publish Homey App
-        uses: athombv/github-action-homey-app-publish@master
-        id: publish
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          personal_access_token: ${{ secrets.HOMEY_PAT }}
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # - name: Publish Homey App
+      #   uses: athombv/github-action-homey-app-publish@master
+      #   id: publish
+      #   with:
+      #     personal_access_token: ${{ secrets.HOMEY_PAT }}
+
+      - name: Publish Homey App
+        id: publish
+        run: |
+          HOMEY_HEADLESS="1" HOMEY_PAT="${{ secrets.HOMEY_PAT }}" npx --yes homey app publish
+          APP_ID=$(node -p "require('./app.json').id")
+          echo "url=https://tools.developer.homey.app/apps/app/$APP_ID" >> $GITHUB_OUTPUT
 
       - name: URL
         run: |
