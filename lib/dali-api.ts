@@ -4,6 +4,39 @@ interface HomeyInterface {
   setTimeout(callback: () => void, ms: number): NodeJS.Timeout;
 }
 
+// DALI Arc Power <-> Percent 변환
+// DALI 표준 로그 커브 기반
+
+const DALI_MAX_ARC = 254;
+
+/**
+ * DALI Arc 값을 퍼센트로 변환
+ * @param arc - DALI arc 값 (1-254, 0은 OFF)
+ * @returns 밝기 퍼센트 (0.1 ~ 100)
+ */
+export function arcToPercent(arc: number): number {
+  if (arc <= 0) return 0;
+  if (arc > DALI_MAX_ARC) arc = DALI_MAX_ARC;
+
+  // DALI 표준 공식: percent = 10^((arc - 254) * 3 / 253)
+  const percent = 10 ** (((arc - 254) * 3) / 253) * 100;
+  return Math.round(percent * 100) / 100; // 소수점 2자리
+}
+
+/**
+ * 퍼센트를 DALI Arc 값으로 변환
+ * @param percent - 밝기 퍼센트 (0-100)
+ * @returns DALI arc 값 (0-254)
+ */
+export function percentToArc(percent: number): number {
+  if (percent <= 0) return 0;
+  if (percent > 100) percent = 100;
+
+  // 역공식: arc = 253/3 * log10(percent/100) + 254
+  const arc = (253 / 3) * Math.log10(percent / 100) + 254;
+  return Math.round(arc);
+}
+
 export interface DaliGear {
   busId: number;
   address: number;
@@ -106,11 +139,11 @@ export class DaliApiClient {
     });
   }
 
-  async setLightLevel(busId: number, address: number, level: number): Promise<void> {
-    this.log(`🔆 Set Light Level - Bus ${busId}, Address ${address}, Level ${level}`);
-    return this.makePostRequest(`/dali/lights/${address}/level`, {
+  async setLightPercent(busId: number, address: number, percent: number): Promise<void> {
+    this.log(`🔆 Set Light Percent - Bus ${busId}, Address ${address}, Percent ${percent}%`);
+    return this.makePostRequest(`/dali/lights/${address}/percent`, {
       bus: busId,
-      level,
+      percent,
     });
   }
 
@@ -142,11 +175,11 @@ export class DaliApiClient {
     });
   }
 
-  async setGroupLevel(busId: number, groupId: number, level: number): Promise<void> {
-    this.log(`🔆 Set Group Level - Bus ${busId}, Group ${groupId}, Level ${level}`);
-    return this.makePostRequest(`/dali/groups/${groupId}/level`, {
+  async setGroupPercent(busId: number, groupId: number, percent: number): Promise<void> {
+    this.log(`🔆 Set Group Percent - Bus ${busId}, Group ${groupId}, Percent ${percent}%`);
+    return this.makePostRequest(`/dali/groups/${groupId}/percent`, {
       bus: busId,
-      level,
+      percent,
     });
   }
 

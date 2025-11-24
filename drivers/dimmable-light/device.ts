@@ -1,5 +1,7 @@
 import Homey from 'homey';
-import { DaliGear, DaliState, DaliApiClient } from '../../lib/dali-api';
+import {
+  DaliGear, DaliState, DaliApiClient, arcToPercent,
+} from '../../lib/dali-api';
 
 class DimmableLightDevice extends Homey.Device {
   private busId!: number;
@@ -25,12 +27,15 @@ class DimmableLightDevice extends Homey.Device {
       const gear = state.gears.find((g: DaliGear) => g.address === this.address);
       if (gear) {
         const isOn = gear.level > 0;
-        const dimValue = gear.level / 254;
+        const percent = arcToPercent(gear.level);
+        const dimValue = percent / 100;
 
         await this.setCapabilityValue('onoff', isOn).catch(this.error);
         await this.setCapabilityValue('dim', dimValue).catch(this.error);
 
-        this.log('Synced state from server:', { isOn, level: gear.level, dimValue });
+        this.log('Synced state from server:', {
+          isOn, level: gear.level, percent, dimValue,
+        });
       }
     }
   }
@@ -68,11 +73,11 @@ class DimmableLightDevice extends Homey.Device {
       throw new Error('DALI Hub not connected');
     }
 
-    const level = Math.round(value * 254);
+    const percent = Math.round(value * 100);
 
-    await client.setLightLevel(this.busId, this.address, level);
+    await client.setLightPercent(this.busId, this.address, percent);
 
-    if (level > 0) {
+    if (percent > 0) {
       await this.setCapabilityValue('onoff', true).catch(this.error);
     } else {
       await this.setCapabilityValue('onoff', false).catch(this.error);
@@ -81,12 +86,15 @@ class DimmableLightDevice extends Homey.Device {
 
   async updateLevelFromEvent(level: number) {
     const isOn = level > 0;
-    const dimValue = level / 254;
+    const percent = arcToPercent(level);
+    const dimValue = percent / 100;
 
     await this.setCapabilityValue('onoff', isOn).catch(this.error);
     await this.setCapabilityValue('dim', dimValue).catch(this.error);
 
-    this.log('Updated from event:', { isOn, level, dimValue });
+    this.log('Updated from event:', {
+      isOn, level, percent, dimValue,
+    });
   }
 
   async increaseBrightness(): Promise<void> {

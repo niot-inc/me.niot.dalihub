@@ -1,5 +1,7 @@
 import Homey from 'homey';
-import { DaliGroup, DaliState, DaliApiClient } from '../../lib/dali-api';
+import {
+  DaliGroup, DaliState, DaliApiClient, arcToPercent,
+} from '../../lib/dali-api';
 
 class LightGroupDevice extends Homey.Device {
   private busId!: number;
@@ -25,12 +27,15 @@ class LightGroupDevice extends Homey.Device {
       const group = state.groups.find((g: DaliGroup) => g.groupId === this.groupId);
       if (group) {
         const isOn = group.level > 0;
-        const dimValue = group.level / 254;
+        const percent = arcToPercent(group.level);
+        const dimValue = percent / 100;
 
         await this.setCapabilityValue('onoff', isOn).catch(this.error);
         await this.setCapabilityValue('dim', dimValue).catch(this.error);
 
-        this.log('Synced state from server:', { isOn, level: group.level, dimValue });
+        this.log('Synced state from server:', {
+          isOn, level: group.level, percent, dimValue,
+        });
       }
     }
   }
@@ -68,11 +73,11 @@ class LightGroupDevice extends Homey.Device {
       throw new Error('DALI Hub not connected');
     }
 
-    const level = Math.round(value * 254);
+    const percent = Math.round(value * 100);
 
-    await client.setGroupLevel(this.busId, this.groupId, level);
+    await client.setGroupPercent(this.busId, this.groupId, percent);
 
-    if (level > 0) {
+    if (percent > 0) {
       await this.setCapabilityValue('onoff', true).catch(this.error);
     } else {
       await this.setCapabilityValue('onoff', false).catch(this.error);
@@ -81,12 +86,15 @@ class LightGroupDevice extends Homey.Device {
 
   async updateLevelFromEvent(level: number) {
     const isOn = level > 0;
-    const dimValue = level / 254;
+    const percent = arcToPercent(level);
+    const dimValue = percent / 100;
 
     await this.setCapabilityValue('onoff', isOn).catch(this.error);
     await this.setCapabilityValue('dim', dimValue).catch(this.error);
 
-    this.log('Updated from event:', { isOn, level, dimValue });
+    this.log('Updated from event:', {
+      isOn, level, percent, dimValue,
+    });
   }
 
   async increaseBrightness(): Promise<void> {
