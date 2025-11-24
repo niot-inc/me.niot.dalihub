@@ -227,7 +227,7 @@ export class DaliApiClient {
         },
       };
 
-      // this.log(`POST ${this.baseUrl}${options.path} body:`, body);
+      this.log(`POST ${this.baseUrl}${options.path} body:`, body);
 
       const req = http.request(options, (res) => {
         let data = '';
