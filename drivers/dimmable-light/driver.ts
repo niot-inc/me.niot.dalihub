@@ -4,6 +4,30 @@ import { DaliGear, DaliState } from '../../lib/dali-api';
 class DimmableLightDriver extends Homey.Driver {
   async onInit() {
     this.log('DimmableLightDriver has been initialized');
+
+    // Register action cards
+    this.homey.flow.getActionCard('dimmable-light-up')
+      .registerRunListener(async (args) => {
+        return args.device.increaseBrightness();
+      });
+
+    this.homey.flow.getActionCard('dimmable-light-down')
+      .registerRunListener(async (args) => {
+        return args.device.decreaseBrightness();
+      });
+
+    // Register condition cards
+    this.homey.flow.getConditionCard('dimmable-light-brightness-greater')
+      .registerRunListener(async (args) => {
+        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        return currentBrightness > args.brightness;
+      });
+
+    this.homey.flow.getConditionCard('dimmable-light-brightness-less')
+      .registerRunListener(async (args) => {
+        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        return currentBrightness < args.brightness;
+      });
   }
 
   async onPairListDevices() {

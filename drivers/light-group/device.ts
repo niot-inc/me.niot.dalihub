@@ -89,6 +89,30 @@ class LightGroupDevice extends Homey.Device {
     this.log('Updated from event:', { isOn, level, dimValue });
   }
 
+  async increaseBrightness(): Promise<void> {
+    const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
+    const client = app.getDaliClient();
+
+    if (!client) {
+      this.error('DALI client not initialized. Please configure server URL in app settings.');
+      throw new Error('DALI Hub not connected');
+    }
+
+    await client.setGroupUp(this.busId, this.groupId);
+  }
+
+  async decreaseBrightness(): Promise<void> {
+    const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
+    const client = app.getDaliClient();
+
+    if (!client) {
+      this.error('DALI client not initialized. Please configure server URL in app settings.');
+      throw new Error('DALI Hub not connected');
+    }
+
+    await client.setGroupDown(this.busId, this.groupId);
+  }
+
   async onDeleted() {
     this.log('LightGroupDevice has been deleted');
   }

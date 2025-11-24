@@ -4,6 +4,30 @@ import { DaliGroup, DaliState } from '../../lib/dali-api';
 class LightGroupDriver extends Homey.Driver {
   async onInit() {
     this.log('LightGroupDriver has been initialized');
+
+    // Register action cards
+    this.homey.flow.getActionCard('light-group-up')
+      .registerRunListener(async (args) => {
+        return args.device.increaseBrightness();
+      });
+
+    this.homey.flow.getActionCard('light-group-down')
+      .registerRunListener(async (args) => {
+        return args.device.decreaseBrightness();
+      });
+
+    // Register condition cards
+    this.homey.flow.getConditionCard('light-group-brightness-greater')
+      .registerRunListener(async (args) => {
+        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        return currentBrightness > args.brightness;
+      });
+
+    this.homey.flow.getConditionCard('light-group-brightness-less')
+      .registerRunListener(async (args) => {
+        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        return currentBrightness < args.brightness;
+      });
   }
 
   async onPairListDevices() {

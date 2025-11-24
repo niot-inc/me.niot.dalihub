@@ -128,6 +128,20 @@ export class DaliApiClient {
     });
   }
 
+  async setLightUp(busId: number, address: number): Promise<void> {
+    this.log(`⬆️ Set Light UP - Bus ${busId}, Address ${address}`);
+    return this.makePostRequest(`/dali/lights/${address}/up`, {
+      bus: busId,
+    });
+  }
+
+  async setLightDown(busId: number, address: number): Promise<void> {
+    this.log(`⬇️ Set Light DOWN - Bus ${busId}, Address ${address}`);
+    return this.makePostRequest(`/dali/lights/${address}/down`, {
+      bus: busId,
+    });
+  }
+
   async setGroupLevel(busId: number, groupId: number, level: number): Promise<void> {
     this.log(`🔆 Set Group Level - Bus ${busId}, Group ${groupId}, Level ${level}`);
     return this.makePostRequest(`/dali/groups/${groupId}/level`, {
@@ -146,6 +160,20 @@ export class DaliApiClient {
   async setGroupOff(busId: number, groupId: number): Promise<void> {
     this.log(`🔌 Set Group OFF - Bus ${busId}, Group ${groupId}`);
     return this.makePostRequest(`/dali/groups/${groupId}/off`, {
+      bus: busId,
+    });
+  }
+
+  async setGroupUp(busId: number, groupId: number): Promise<void> {
+    this.log(`⬆️ Set Group UP - Bus ${busId}, Group ${groupId}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/up`, {
+      bus: busId,
+    });
+  }
+
+  async setGroupDown(busId: number, groupId: number): Promise<void> {
+    this.log(`⬇️ Set Group DOWN - Bus ${busId}, Group ${groupId}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/down`, {
       bus: busId,
     });
   }

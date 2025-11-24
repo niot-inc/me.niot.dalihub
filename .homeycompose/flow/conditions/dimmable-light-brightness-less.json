@@ -1,0 +1,33 @@
+{
+  "title": {
+    "en": "Brightness is less than",
+    "ko": "밝기가 더 작으면"
+  },
+  "titleFormatted": {
+    "en": "Brightness is less than [[brightness]]%",
+    "ko": "밝기가 [[brightness]]%보다 작으면"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dimmable-light"
+    },
+    {
+      "type": "range",
+      "name": "brightness",
+      "title": {
+        "en": "Brightness %",
+        "ko": "밝기 %"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "%",
+      "placeholder": {
+        "en": "Brightness %",
+        "ko": "밝기 %"
+      }
+    }
+  ]
+}

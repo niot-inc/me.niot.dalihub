@@ -89,6 +89,30 @@ class DimmableLightDevice extends Homey.Device {
     this.log('Updated from event:', { isOn, level, dimValue });
   }
 
+  async increaseBrightness(): Promise<void> {
+    const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
+    const client = app.getDaliClient();
+
+    if (!client) {
+      this.error('DALI client not initialized. Please configure server URL in app settings.');
+      throw new Error('DALI Hub not connected');
+    }
+
+    await client.setLightUp(this.busId, this.address);
+  }
+
+  async decreaseBrightness(): Promise<void> {
+    const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
+    const client = app.getDaliClient();
+
+    if (!client) {
+      this.error('DALI client not initialized. Please configure server URL in app settings.');
+      throw new Error('DALI Hub not connected');
+    }
+
+    await client.setLightDown(this.busId, this.address);
+  }
+
   async onDeleted() {
     this.log('DimmableLightDevice has been deleted');
   }
