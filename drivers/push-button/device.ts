@@ -26,27 +26,27 @@ class PushButtonDevice extends Homey.Device {
   async handleButtonEvent(eventCode?: number) {
     if (eventCode === undefined) return;
 
-    this.log('Button event:', eventCode);
+    // this.log('Button event:', eventCode);
 
     switch (eventCode) {
       case 2:
-        this.log('Short Press');
+        // this.log('Short Press');
         await this.shortPressFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 9:
-        this.log('Long Press Start');
+        // this.log('Long Press Start');
         await this.longPressStartFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 11:
-        this.log('Long Press Repeat');
+        // this.log('Long Press Repeat');
         await this.longPressRepeatFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 12:
-        this.log('Long Press Stop');
+        // this.log('Long Press Stop');
         await this.longPressStopFlow.trigger(this, {}, {}).catch(this.error);
         break;
       default:
-        this.log('Unknown event code:', eventCode);
+        // this.log('Unknown event code:', eventCode);
         break;
     }
   }

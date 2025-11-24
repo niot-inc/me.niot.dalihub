@@ -20,7 +20,15 @@ class LuxSensorDriver extends Homey.Driver {
   }
 
   async onPairListDevices() {
-    const app = this.homey.app as unknown as { getDaliState: (busId: number) => DaliState | undefined };
+    const app = this.homey.app as unknown as {
+      getDaliState: (busId: number) => DaliState | undefined;
+      reloadState: () => Promise<void>;
+    };
+
+    // Reload state from server to get latest devices
+    this.log('Reloading state from server...');
+    await app.reloadState();
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const devices: any[] = [];
 

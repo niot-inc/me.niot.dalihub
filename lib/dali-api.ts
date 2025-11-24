@@ -69,6 +69,8 @@ export class DaliApiClient {
   private homey: HomeyInterface;
   private sseRequest: http.ClientRequest | null = null;
   private eventHandlers: Map<string, Set<(event: DaliEvent) => void>> = new Map();
+  private reconnectTimeout: NodeJS.Timeout | null = null;
+  private shouldReconnect: boolean = true;
 
   constructor(host: string, homey: HomeyInterface, logger: (...args: unknown[]) => void) {
     // If host doesn't include port, add default port 3000
@@ -105,6 +107,7 @@ export class DaliApiClient {
   }
 
   async setLightLevel(busId: number, address: number, level: number): Promise<void> {
+    this.log(`🔆 Set Light Level - Bus ${busId}, Address ${address}, Level ${level}`);
     return this.makePostRequest(`/dali/lights/${address}/level`, {
       bus: busId,
       level,
@@ -112,19 +115,21 @@ export class DaliApiClient {
   }
 
   async setLightOn(busId: number, address: number): Promise<void> {
+    this.log(`💡 Set Light ON - Bus ${busId}, Address ${address}`);
     return this.makePostRequest(`/dali/lights/${address}/on`, {
       bus: busId,
     });
   }
 
   async setLightOff(busId: number, address: number): Promise<void> {
+    this.log(`🔌 Set Light OFF - Bus ${busId}, Address ${address}`);
     return this.makePostRequest(`/dali/lights/${address}/off`, {
       bus: busId,
     });
   }
 
   async setGroupLevel(busId: number, groupId: number, level: number): Promise<void> {
-    this.log(`setGroupLevel called with busId=${busId}, groupId=${groupId}, level=${level}`);
+    this.log(`🔆 Set Group Level - Bus ${busId}, Group ${groupId}, Level ${level}`);
     return this.makePostRequest(`/dali/groups/${groupId}/level`, {
       bus: busId,
       level,
@@ -132,12 +137,14 @@ export class DaliApiClient {
   }
 
   async setGroupOn(busId: number, groupId: number): Promise<void> {
+    this.log(`💡 Set Group ON - Bus ${busId}, Group ${groupId}`);
     return this.makePostRequest(`/dali/groups/${groupId}/on`, {
       bus: busId,
     });
   }
 
   async setGroupOff(busId: number, groupId: number): Promise<void> {
+    this.log(`🔌 Set Group OFF - Bus ${busId}, Group ${groupId}`);
     return this.makePostRequest(`/dali/groups/${groupId}/off`, {
       bus: busId,
     });
@@ -159,7 +166,7 @@ export class DaliApiClient {
         },
       };
 
-      this.log(`POST ${this.baseUrl}${options.path} body:`, body);
+      // this.log(`POST ${this.baseUrl}${options.path} body:`, body);
 
       const req = http.request(options, (res) => {
         let data = '';
@@ -191,6 +198,9 @@ export class DaliApiClient {
       this.log('SSE already connected');
       return;
     }
+
+    // Enable reconnection for this connection
+    this.shouldReconnect = true;
 
     const url = new URL('/events/state', this.baseUrl);
     this.log('Connecting to SSE:', url.href);
@@ -233,20 +243,26 @@ export class DaliApiClient {
       res.on('end', () => {
         this.log('SSE connection ended');
         this.sseRequest = null;
-        this.homey.setTimeout(() => this.reconnect(), 5000);
+        if (this.shouldReconnect) {
+          this.reconnectTimeout = this.homey.setTimeout(() => this.reconnect(), 5000);
+        }
       });
 
       res.on('error', (error) => {
         this.log('SSE response error:', error);
         this.sseRequest = null;
-        this.homey.setTimeout(() => this.reconnect(), 5000);
+        if (this.shouldReconnect) {
+          this.reconnectTimeout = this.homey.setTimeout(() => this.reconnect(), 5000);
+        }
       });
     });
 
     this.sseRequest.on('error', (error) => {
       this.log('SSE request error:', error);
       this.sseRequest = null;
-      this.homey.setTimeout(() => this.reconnect(), 5000);
+      if (this.shouldReconnect) {
+        this.reconnectTimeout = this.homey.setTimeout(() => this.reconnect(), 5000);
+      }
     });
 
     this.sseRequest.end();
@@ -258,6 +274,16 @@ export class DaliApiClient {
   }
 
   disconnectFromEventStream(): void {
+    // Prevent any reconnection attempts
+    this.shouldReconnect = false;
+
+    // Clear any pending reconnect timeout
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+
+    // Destroy the SSE connection
     if (this.sseRequest) {
       this.sseRequest.destroy();
       this.sseRequest = null;
@@ -280,8 +306,8 @@ export class DaliApiClient {
   }
 
   private emitEvent(event: DaliEvent): void {
-    // Skip logging for frequent lux events to reduce noise
-    if (event.type !== 'control-device.lux') {
+    // Skip logging for sensor events to reduce noise (only show light-related events)
+    if (event.type !== 'control-device.lux' && event.type !== 'control-device.changed') {
       this.log('SSE event received:', event.type, event);
     }
 

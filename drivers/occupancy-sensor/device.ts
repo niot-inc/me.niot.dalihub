@@ -29,27 +29,27 @@ class OccupancySensorDevice extends Homey.Device {
   async handleOccupancyEvent(eventCode?: number) {
     if (eventCode === undefined) return;
 
-    this.log('Occupancy event:', eventCode);
+    // this.log('Occupancy event:', eventCode);
 
     switch (eventCode) {
       case 8:
         this.occupancyState = 'vacant';
-        this.log('Vacant');
+        // this.log('Vacant');
         await this.vacantFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 10:
         this.occupancyState = 'occupied_no_movement';
-        this.log('Occupied (No movement)');
+        // this.log('Occupied (No movement)');
         await this.occupiedNoMovementFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 11:
         this.occupancyState = 'movement_detected';
-        this.log('Occupied (Movement)');
+        // this.log('Occupied (Movement)');
         await this.movementDetectedFlow.trigger(this, {}, {}).catch(this.error);
         break;
       default:
-        this.log('Unknown event code:', eventCode);
-        return;
+        // this.log('Unknown event code:', eventCode);
+        break;
     }
   }
 

@@ -128,6 +128,8 @@ class DaliHubApp extends Homey.App {
     const { level } = event;
     const { address } = event;
 
+    this.log(`⚡ Gear Changed - Bus ${event.busId}, Address ${address}, Level ${level}`);
+
     const state = this.daliState.get(event.busId);
     if (state) {
       const gear = state.gears.find((g) => g.address === address);
@@ -155,10 +157,14 @@ class DaliHubApp extends Homey.App {
   }
 
   private handleGroupChanged(event: DaliEvent): void {
-    if (event.groupId === undefined || event.level === undefined) return;
+    if (event.groupId === undefined || event.level === undefined) {
+      return;
+    }
 
     const { level } = event;
     const { groupId } = event;
+
+    this.log(`⚡ Group Changed - Bus ${event.busId}, Group ${groupId}, Level ${level}`);
 
     const state = this.daliState.get(event.busId);
     if (state) {
@@ -174,6 +180,7 @@ class DaliHubApp extends Homey.App {
       devices.forEach((device) => {
         const deviceData = device.getData();
         if (deviceData.busId === event.busId && deviceData.groupId === groupId) {
+          this.log(`  → Updating device: ${device.getName()}`);
           device.updateLevelFromEvent(level).catch((err: Error) => {
             this.error('Failed to update group level:', err);
           });
@@ -183,10 +190,10 @@ class DaliHubApp extends Homey.App {
   }
 
   private handleControlDeviceChanged(event: DaliEvent): void {
-    this.log('Control device changed event:', JSON.stringify(event));
+    // this.log('Control device changed event:', JSON.stringify(event));
 
     if (event.address === undefined || event.instanceIndex === undefined || event.eventCode === undefined) {
-      this.log('Event missing required fields - address:', event.address, 'instanceIndex:', event.instanceIndex, 'eventCode:', event.eventCode);
+      // this.log('Event missing required fields - address:', event.address, 'instanceIndex:', event.instanceIndex, 'eventCode:', event.eventCode);
       return;
     }
 
@@ -216,26 +223,26 @@ class DaliHubApp extends Homey.App {
             });
           }
         } else if (instance && instance.type === 1) {
-          this.log('Button instance found - type:', instance.type, 'name:', instance.name);
+          // this.log('Button instance found - type:', instance.type, 'name:', instance.name);
           const drivers = this.homey.drivers.getDrivers();
           const driver = drivers['push-button'];
           if (driver) {
             const devices = driver.getDevices() as DaliDevice[];
-            this.log('Found', devices.length, 'push-button devices');
+            // this.log('Found', devices.length, 'push-button devices');
             devices.forEach((device) => {
               const deviceData = device.getData();
-              this.log('Checking device:', deviceData.busId, deviceData.address, deviceData.instanceIndex, 'vs event:', event.busId, address, instanceIndex);
+              // this.log('Checking device:', deviceData.busId, deviceData.address, deviceData.instanceIndex, 'vs event:', event.busId, address, instanceIndex);
               if (deviceData.busId === event.busId
                   && deviceData.address === address
                   && deviceData.instanceIndex === instanceIndex) {
-                this.log('Matched! Calling handleButtonEvent with eventCode:', eventCode);
+                // this.log('Matched! Calling handleButtonEvent with eventCode:', eventCode);
                 device.handleButtonEvent?.(eventCode).catch((err: Error) => {
                   this.error('Failed to handle button event:', err);
                 });
               }
             });
           } else {
-            this.log('push-button driver not found!');
+            // this.log('push-button driver not found!');
           }
         }
       }
@@ -283,6 +290,22 @@ class DaliHubApp extends Homey.App {
 
   getDaliState(busId: number): DaliState | undefined {
     return this.daliState.get(busId);
+  }
+
+  async reloadState(busId?: number): Promise<void> {
+    if (busId !== undefined) {
+      // Reload specific bus
+      try {
+        const state = await this.daliClient.getState(busId);
+        this.daliState.set(busId, state);
+        this.log(`Bus ${busId} state reloaded: ${state.gears.length} gears, ${state.groups.length} groups, ${state.controlDevices.length} control devices`);
+      } catch (error) {
+        this.error(`Failed to reload state for bus ${busId}:`, error);
+      }
+    } else {
+      // Reload all buses
+      await this.loadInitialState();
+    }
   }
 }
 
