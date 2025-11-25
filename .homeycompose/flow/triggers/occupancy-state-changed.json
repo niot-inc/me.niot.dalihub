@@ -1,0 +1,24 @@
+{
+  "title": {
+    "en": "Occupancy state changed",
+    "ko": "점유 상태가 변경됨"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=occupancy-sensor"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "state",
+      "type": "string",
+      "title": {
+        "en": "State",
+        "ko": "상태"
+      },
+      "example": "movement_detected"
+    }
+  ]
+}

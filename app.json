@@ -42,8 +42,8 @@
     "triggers": [
       {
         "title": {
-          "en": "Movement detected",
-          "ko": "움직임 감지됨"
+          "en": "Occupancy state changed",
+          "ko": "점유 상태가 변경됨"
         },
         "args": [
           {
@@ -52,35 +52,18 @@
             "filter": "driver_id=occupancy-sensor"
           }
         ],
-        "id": "occupancy-movement-detected"
-      },
-      {
-        "title": {
-          "en": "Occupied, no movement",
-          "ko": "점유 중, 움직임 없음"
-        },
-        "args": [
+        "tokens": [
           {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=occupancy-sensor"
+            "name": "state",
+            "type": "string",
+            "title": {
+              "en": "State",
+              "ko": "상태"
+            },
+            "example": "movement_detected"
           }
         ],
-        "id": "occupancy-occupied-no-movement"
-      },
-      {
-        "title": {
-          "en": "Vacant",
-          "ko": "비어있음"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=occupancy-sensor"
-          }
-        ],
-        "id": "occupancy-vacant"
+        "id": "occupancy-state-changed"
       },
       {
         "title": {
@@ -344,45 +327,52 @@
       },
       {
         "title": {
-          "en": "Movement is !{{detected|not detected}}",
-          "ko": "움직임이 !{{감지됨|감지 안됨}}"
+          "en": "Occupancy state !{{is|is not}}...",
+          "ko": "점유 상태가 !{{~이면|~이 아니면}}..."
+        },
+        "titleFormatted": {
+          "en": "Occupancy state !{{is|is not}} [[state]]",
+          "ko": "점유 상태가 [[state]] !{{이면|이 아니면}}"
         },
         "args": [
           {
             "type": "device",
             "name": "device",
             "filter": "driver_id=occupancy-sensor"
-          }
-        ],
-        "id": "occupancy-is-movement-detected"
-      },
-      {
-        "title": {
-          "en": "Is !{{occupied with no movement|not occupied with no movement}}",
-          "ko": "!{{점유 중 움직임 없음|점유 중 움직임 없음 아님}}"
-        },
-        "args": [
+          },
           {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=occupancy-sensor"
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State",
+              "ko": "상태"
+            },
+            "values": [
+              {
+                "id": "movement_detected",
+                "label": {
+                  "en": "Movement detected",
+                  "ko": "움직임 감지됨"
+                }
+              },
+              {
+                "id": "occupied_no_movement",
+                "label": {
+                  "en": "Occupied, no movement",
+                  "ko": "점유, 움직임 없음"
+                }
+              },
+              {
+                "id": "vacant",
+                "label": {
+                  "en": "Vacant",
+                  "ko": "비어있음"
+                }
+              }
+            ]
           }
         ],
-        "id": "occupancy-is-occupied-no-movement"
-      },
-      {
-        "title": {
-          "en": "Is !{{vacant|not vacant}}",
-          "ko": "!{{비어있음|비어있지 않음}}"
-        },
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=occupancy-sensor"
-          }
-        ],
-        "id": "occupancy-is-vacant"
+        "id": "occupancy-state-is"
       }
     ],
     "actions": [
@@ -630,7 +620,9 @@
         "ko": "DALI 점유 센서"
       },
       "class": "sensor",
-      "capabilities": [],
+      "capabilities": [
+        "alarm_motion"
+      ],
       "platforms": [
         "local"
       ],

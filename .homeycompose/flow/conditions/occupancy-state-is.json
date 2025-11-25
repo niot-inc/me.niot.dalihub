@@ -1,0 +1,48 @@
+{
+  "title": {
+    "en": "Occupancy state !{{is|is not}}...",
+    "ko": "점유 상태가 !{{~이면|~이 아니면}}..."
+  },
+  "titleFormatted": {
+    "en": "Occupancy state !{{is|is not}} [[state]]",
+    "ko": "점유 상태가 [[state]] !{{이면|이 아니면}}"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=occupancy-sensor"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "State",
+        "ko": "상태"
+      },
+      "values": [
+        {
+          "id": "movement_detected",
+          "label": {
+            "en": "Movement detected",
+            "ko": "움직임 감지됨"
+          }
+        },
+        {
+          "id": "occupied_no_movement",
+          "label": {
+            "en": "Occupied, no movement",
+            "ko": "점유, 움직임 없음"
+          }
+        },
+        {
+          "id": "vacant",
+          "label": {
+            "en": "Vacant",
+            "ko": "비어있음"
+          }
+        }
+      ]
+    }
+  ]
+}

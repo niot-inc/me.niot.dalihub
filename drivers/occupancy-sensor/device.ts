@@ -4,9 +4,7 @@ class OccupancySensorDevice extends Homey.Device {
   private busId!: number;
   private address!: number;
   private instanceIndex!: number;
-  private movementDetectedFlow!: Homey.FlowCardTriggerDevice;
-  private occupiedNoMovementFlow!: Homey.FlowCardTriggerDevice;
-  private vacantFlow!: Homey.FlowCardTriggerDevice;
+  private occupancyStateChangedFlow!: Homey.FlowCardTriggerDevice;
   private occupancyState: 'vacant' | 'occupied_no_movement' | 'movement_detected' = 'vacant';
 
   async onInit() {
@@ -17,9 +15,13 @@ class OccupancySensorDevice extends Homey.Device {
 
     this.log('OccupancySensorDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Address ${this.address}, Instance ${this.instanceIndex})`);
 
-    this.movementDetectedFlow = this.homey.flow.getDeviceTriggerCard('occupancy-movement-detected');
-    this.occupiedNoMovementFlow = this.homey.flow.getDeviceTriggerCard('occupancy-occupied-no-movement');
-    this.vacantFlow = this.homey.flow.getDeviceTriggerCard('occupancy-vacant');
+    // Add alarm_motion capability if it doesn't exist (for existing paired devices)
+    if (!this.hasCapability('alarm_motion')) {
+      await this.addCapability('alarm_motion').catch(this.error);
+      this.log('Added alarm_motion capability');
+    }
+
+    this.occupancyStateChangedFlow = this.homey.flow.getDeviceTriggerCard('occupancy-state-changed');
   }
 
   getOccupancyState(): 'vacant' | 'occupied_no_movement' | 'movement_detected' {
@@ -29,27 +31,42 @@ class OccupancySensorDevice extends Homey.Device {
   async handleOccupancyEvent(eventCode?: number) {
     if (eventCode === undefined) return;
 
-    // this.log('Occupancy event:', eventCode);
+    this.log('Occupancy event:', eventCode);
+
+    let newState: 'vacant' | 'occupied_no_movement' | 'movement_detected' | null = null;
 
     switch (eventCode) {
       case 8:
-        this.occupancyState = 'vacant';
-        // this.log('Vacant');
-        await this.vacantFlow.trigger(this, {}, {}).catch(this.error);
+        newState = 'vacant';
+        await this.setCapabilityValue('alarm_motion', false).catch(this.error);
+        this.log('State changed to: Vacant');
         break;
       case 10:
-        this.occupancyState = 'occupied_no_movement';
-        // this.log('Occupied (No movement)');
-        await this.occupiedNoMovementFlow.trigger(this, {}, {}).catch(this.error);
+        newState = 'occupied_no_movement';
+        await this.setCapabilityValue('alarm_motion', false).catch(this.error);
+        this.log('State changed to: Occupied (No movement)');
         break;
       case 11:
-        this.occupancyState = 'movement_detected';
-        // this.log('Occupied (Movement)');
-        await this.movementDetectedFlow.trigger(this, {}, {}).catch(this.error);
+        newState = 'movement_detected';
+        await this.setCapabilityValue('alarm_motion', true).catch(this.error);
+        this.log('State changed to: Movement detected');
         break;
       default:
-        // this.log('Unknown event code:', eventCode);
+        this.log('Unknown event code:', eventCode);
         break;
+    }
+
+    if (newState) {
+      this.occupancyState = newState;
+
+      this.log('Triggering flow card with state:', newState);
+      await this.occupancyStateChangedFlow.trigger(
+        this,
+        { state: newState },
+        { state: newState },
+      ).catch((err) => {
+        this.error('Failed to trigger flow card:', err);
+      });
     }
   }
 

@@ -5,23 +5,11 @@ class OccupancySensorDriver extends Homey.Driver {
   async onInit() {
     this.log('OccupancySensorDriver has been initialized');
 
-    // Register condition cards
-    this.homey.flow.getConditionCard('occupancy-is-movement-detected')
+    // Register unified condition card
+    this.homey.flow.getConditionCard('occupancy-state-is')
       .registerRunListener(async (args) => {
-        const state = args.device.getOccupancyState();
-        return state === 'movement_detected';
-      });
-
-    this.homey.flow.getConditionCard('occupancy-is-occupied-no-movement')
-      .registerRunListener(async (args) => {
-        const state = args.device.getOccupancyState();
-        return state === 'occupied_no_movement';
-      });
-
-    this.homey.flow.getConditionCard('occupancy-is-vacant')
-      .registerRunListener(async (args) => {
-        const state = args.device.getOccupancyState();
-        return state === 'vacant';
+        const currentState = args.device.getOccupancyState();
+        return currentState === args.state;
       });
   }
 

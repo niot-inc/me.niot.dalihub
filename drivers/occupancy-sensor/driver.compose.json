@@ -5,7 +5,9 @@
     "ko": "DALI 점유 센서"
   },
   "class": "sensor",
-  "capabilities": [],
+  "capabilities": [
+    "alarm_motion"
+  ],
   "platforms": [
     "local"
   ],

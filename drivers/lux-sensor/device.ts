@@ -15,6 +15,12 @@ class LuxSensorDevice extends Homey.Device {
 
     this.log('LuxSensorDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Address ${this.address}, Instance ${this.instanceIndex})`);
 
+    // Add measure_luminance capability if it doesn't exist (for existing paired devices)
+    if (!this.hasCapability('measure_luminance')) {
+      await this.addCapability('measure_luminance').catch(this.error);
+      this.log('Added measure_luminance capability');
+    }
+
     await this.syncStateFromServer();
   }
 
