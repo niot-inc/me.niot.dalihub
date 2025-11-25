@@ -16,5 +16,8 @@
   },
   "1.0.5": {
     "en": "Apply DALI dimming curve."
+  },
+  "1.0.6": {
+    "en": "Add measure_luminance capability to LuxSensorDevice."
   }
 }
