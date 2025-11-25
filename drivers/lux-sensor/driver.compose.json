@@ -5,7 +5,9 @@
     "ko": "DALI 조도 센서"
   },
   "class": "sensor",
-  "capabilities": [],
+  "capabilities": [
+    "measure_luminance"
+  ],
   "platforms": [
     "local"
   ],

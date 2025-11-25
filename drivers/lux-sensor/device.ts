@@ -31,6 +31,7 @@ class LuxSensorDevice extends Homey.Device {
         const instance = controlDevice.instances.find((i: DaliControlDeviceInstance) => i.index === this.instanceIndex);
         if (instance && instance.luxValue !== undefined) {
           this.currentLux = instance.luxValue;
+          await this.setCapabilityValue('measure_luminance', instance.luxValue).catch(this.error);
           // this.log('Synced lux value from server:', instance.luxValue);
         }
       }
@@ -39,6 +40,7 @@ class LuxSensorDevice extends Homey.Device {
 
   async updateLuxValue(luxValue: number) {
     this.currentLux = luxValue;
+    await this.setCapabilityValue('measure_luminance', luxValue).catch(this.error);
     // this.log('Updated lux value:', luxValue);
   }
 
