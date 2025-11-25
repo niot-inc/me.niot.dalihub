@@ -12,6 +12,10 @@ class BistableLightDevice extends Homey.Device {
 
     this.log('BistableLightDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Address ${this.address})`);
 
+    // Apply device class from settings
+    const deviceClass = this.getSetting('device_class') || 'light';
+    await this.setClass(deviceClass).catch(this.error);
+
     this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
 
     await this.syncStateFromServer();
@@ -52,6 +56,24 @@ class BistableLightDevice extends Homey.Device {
     const isOn = level > 0;
     await this.setCapabilityValue('onoff', isOn).catch(this.error);
     this.log('Updated from event:', { isOn, level });
+  }
+
+  async onSettings({
+    oldSettings,
+    newSettings,
+    changedKeys,
+  }: {
+    oldSettings: { [key: string]: boolean | string | number | undefined | null };
+    newSettings: { [key: string]: boolean | string | number | undefined | null };
+    changedKeys: string[];
+  }): Promise<string | void> {
+    this.log('Settings changed:', changedKeys);
+
+    if (changedKeys.includes('device_class')) {
+      const deviceClass = newSettings.device_class as string;
+      this.log('Changing device class to:', deviceClass);
+      await this.setClass(deviceClass);
+    }
   }
 
   async onDeleted() {

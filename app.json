@@ -461,6 +461,42 @@
       "connectivity": [
         "lan"
       ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Device Settings",
+            "ko": "기기 설정"
+          },
+          "children": [
+            {
+              "id": "device_class",
+              "type": "dropdown",
+              "label": {
+                "en": "Device Type",
+                "ko": "기기 타입"
+              },
+              "value": "light",
+              "values": [
+                {
+                  "id": "light",
+                  "label": {
+                    "en": "Light",
+                    "ko": "조명"
+                  }
+                },
+                {
+                  "id": "fan",
+                  "label": {
+                    "en": "Fan",
+                    "ko": "환풍기"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
       "images": {
         "small": "/drivers/bistable-light/assets/images/small.png",
         "large": "/drivers/bistable-light/assets/images/large.png",
