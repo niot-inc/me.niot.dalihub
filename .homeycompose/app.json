@@ -1,6 +1,6 @@
 {
   "id": "me.niot.dalihub",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "platforms": [
@@ -43,8 +43,8 @@
         "username": "wonshikkim"
       },
       "githubSponsors": {
-         "username": "wokim"
-       }
+        "username": "wokim"
+      }
     }
   }
 }

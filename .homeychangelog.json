@@ -22,5 +22,8 @@
   },
   "1.0.7": {
     "en": "Refactor occupancy sensor flow conditions and triggers."
+  },
+  "1.0.8": {
+    "en": "Add DALI level control capabilities and scene management features."
   }
 }
