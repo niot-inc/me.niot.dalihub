@@ -1,0 +1,24 @@
+{
+  "title": {
+    "en": "DALI level changed",
+    "ko": "DALI 레벨이 변경됨"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dimmable-light"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "level",
+      "type": "number",
+      "title": {
+        "en": "Level",
+        "ko": "레벨"
+      },
+      "example": 127
+    }
+  ]
+}

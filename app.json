@@ -38,8 +38,68 @@
     "email": "support@niot.me"
   },
   "support": "mailto:support@niot.me",
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "wonshikkim"
+      },
+      "githubSponsors": {
+        "username": "wokim"
+      }
+    }
+  },
   "flow": {
     "triggers": [
+      {
+        "title": {
+          "en": "DALI level changed",
+          "ko": "DALI 레벨이 변경됨"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "level",
+            "type": "number",
+            "title": {
+              "en": "Level",
+              "ko": "레벨"
+            },
+            "example": 127
+          }
+        ],
+        "id": "dimmable-light-level-changed"
+      },
+      {
+        "title": {
+          "en": "DALI level changed",
+          "ko": "DALI 레벨이 변경됨"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "level",
+            "type": "number",
+            "title": {
+              "en": "Level",
+              "ko": "레벨"
+            },
+            "example": 127
+          }
+        ],
+        "id": "light-group-level-changed"
+      },
       {
         "title": {
           "en": "Occupancy state changed",
@@ -193,6 +253,74 @@
       },
       {
         "title": {
+          "en": "DALI level is greater than",
+          "ko": "DALI 레벨이 더 크면"
+        },
+        "titleFormatted": {
+          "en": "DALI level is greater than [[level]]",
+          "ko": "DALI 레벨이 [[level]]보다 크면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            }
+          }
+        ],
+        "id": "dimmable-light-level-greater"
+      },
+      {
+        "title": {
+          "en": "DALI level is less than",
+          "ko": "DALI 레벨이 더 작으면"
+        },
+        "titleFormatted": {
+          "en": "DALI level is less than [[level]]",
+          "ko": "DALI 레벨이 [[level]]보다 작으면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            }
+          }
+        ],
+        "id": "dimmable-light-level-less"
+      },
+      {
+        "title": {
           "en": "Brightness is greater than",
           "ko": "밝기가 더 크면"
         },
@@ -258,6 +386,74 @@
           }
         ],
         "id": "light-group-brightness-less"
+      },
+      {
+        "title": {
+          "en": "DALI level is greater than",
+          "ko": "DALI 레벨이 더 크면"
+        },
+        "titleFormatted": {
+          "en": "DALI level is greater than [[level]]",
+          "ko": "DALI 레벨이 [[level]]보다 크면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            }
+          }
+        ],
+        "id": "light-group-level-greater"
+      },
+      {
+        "title": {
+          "en": "DALI level is less than",
+          "ko": "DALI 레벨이 더 작으면"
+        },
+        "titleFormatted": {
+          "en": "DALI level is less than [[level]]",
+          "ko": "DALI 레벨이 [[level]]보다 작으면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            }
+          }
+        ],
+        "id": "light-group-level-less"
       },
       {
         "title": {
@@ -392,6 +588,40 @@
       },
       {
         "title": {
+          "en": "Set DALI level",
+          "ko": "DALI 레벨 설정"
+        },
+        "titleFormatted": {
+          "en": "Set DALI level to [[level]]",
+          "ko": "DALI 레벨을 [[level]]로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level (0-254)",
+              "ko": "DALI 레벨 (0-254)"
+            }
+          }
+        ],
+        "id": "dimmable-light-set-level"
+      },
+      {
+        "title": {
           "en": "Increase brightness",
           "ko": "밝기 올리기"
         },
@@ -420,6 +650,40 @@
       },
       {
         "title": {
+          "en": "Set DALI level",
+          "ko": "DALI 레벨 설정"
+        },
+        "titleFormatted": {
+          "en": "Set DALI level to [[level]]",
+          "ko": "DALI 레벨을 [[level]]로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level (0-254)",
+              "ko": "DALI 레벨 (0-254)"
+            }
+          }
+        ],
+        "id": "light-group-set-level"
+      },
+      {
+        "title": {
           "en": "Increase brightness",
           "ko": "밝기 올리기"
         },
@@ -431,6 +695,140 @@
           }
         ],
         "id": "light-group-up"
+      },
+      {
+        "title": {
+          "en": "Recall scene to address",
+          "ko": "주소에 씬 호출"
+        },
+        "titleFormatted": {
+          "en": "Recall scene [[scene]] to address [[address]]",
+          "ko": "주소 [[address]]에 씬 [[scene]] 호출"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=scene-controller"
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "address",
+            "title": {
+              "en": "Address",
+              "ko": "주소"
+            },
+            "min": 0,
+            "max": 63,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Address (0-63)",
+              "ko": "주소 (0-63)"
+            }
+          }
+        ],
+        "id": "scene-recall-address"
+      },
+      {
+        "title": {
+          "en": "Recall scene (broadcast)",
+          "ko": "씬 호출 (브로드캐스트)"
+        },
+        "titleFormatted": {
+          "en": "Recall scene [[scene]] to all devices",
+          "ko": "모든 디바이스에 씬 [[scene]] 호출"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=scene-controller"
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          }
+        ],
+        "id": "scene-recall-broadcast"
+      },
+      {
+        "title": {
+          "en": "Recall scene to group",
+          "ko": "그룹에 씬 호출"
+        },
+        "titleFormatted": {
+          "en": "Recall scene [[scene]] to group [[group]]",
+          "ko": "그룹 [[group]]에 씬 [[scene]] 호출"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=scene-controller"
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "group",
+            "title": {
+              "en": "Group",
+              "ko": "그룹"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Group (0-15)",
+              "ko": "그룹 (0-15)"
+            }
+          }
+        ],
+        "id": "scene-recall-group"
       }
     ]
   },
@@ -515,7 +913,8 @@
       "class": "light",
       "capabilities": [
         "onoff",
-        "dim"
+        "dim",
+        "dali_level"
       ],
       "platforms": [
         "local"
@@ -551,7 +950,8 @@
       "class": "light",
       "capabilities": [
         "onoff",
-        "dim"
+        "dim",
+        "dali_level"
       ],
       "platforms": [
         "local"
@@ -680,6 +1080,65 @@
           "template": "add_devices"
         }
       ]
+    },
+    {
+      "id": "scene-controller",
+      "name": {
+        "en": "DALI Scene Controller",
+        "ko": "DALI 씬 컨트롤러"
+      },
+      "class": "other",
+      "capabilities": [],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/scene-controller/assets/images/small.png",
+        "large": "/drivers/scene-controller/assets/images/large.png",
+        "xlarge": "/drivers/scene-controller/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
     }
-  ]
+  ],
+  "capabilities": {
+    "dali_level": {
+      "type": "number",
+      "title": {
+        "en": "DALI Level",
+        "ko": "DALI 레벨"
+      },
+      "desc": {
+        "en": "Direct DALI arc power level (0-254)",
+        "ko": "직접 DALI 아크 파워 레벨 (0-254)"
+      },
+      "units": {
+        "en": "level",
+        "ko": "레벨"
+      },
+      "min": 0,
+      "max": 254,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "uiQuickAction": true,
+      "icon": "/assets/capability_icons/dali_level.svg"
+    }
+  }
 }

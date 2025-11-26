@@ -1,0 +1,33 @@
+{
+  "title": {
+    "en": "DALI level is less than",
+    "ko": "DALI 레벨이 더 작으면"
+  },
+  "titleFormatted": {
+    "en": "DALI level is less than [[level]]",
+    "ko": "DALI 레벨이 [[level]]보다 작으면"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=light-group"
+    },
+    {
+      "type": "range",
+      "name": "level",
+      "title": {
+        "en": "DALI Level",
+        "ko": "DALI 레벨"
+      },
+      "min": 0,
+      "max": 254,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "DALI Level",
+        "ko": "DALI 레벨"
+      }
+    }
+  ]
+}

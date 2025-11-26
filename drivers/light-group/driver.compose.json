@@ -7,7 +7,8 @@
   "class": "light",
   "capabilities": [
     "onoff",
-    "dim"
+    "dim",
+    "dali_level"
   ],
   "platforms": [
     "local"

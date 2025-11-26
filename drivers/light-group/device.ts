@@ -1,9 +1,14 @@
 import Homey from 'homey';
 import {
-  DaliGroup, DaliState, DaliApiClient, arcToPercent,
+  DaliGroup, DaliState, DaliApiClient, arcToPercent, percentToArc,
 } from '../../lib/dali-api';
 
+interface LightGroupDriver extends Homey.Driver {
+  triggerLevelChanged(device: Homey.Device, tokens: { level: number }): Promise<void>;
+}
+
 class LightGroupDevice extends Homey.Device {
+  declare driver: LightGroupDriver;
   private busId!: number;
   private groupId!: number;
 
@@ -14,8 +19,15 @@ class LightGroupDevice extends Homey.Device {
 
     this.log('LightGroupDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Group ${this.groupId})`);
 
+    // Add dali_level capability if it doesn't exist (for existing devices)
+    if (!this.hasCapability('dali_level')) {
+      this.log('Adding dali_level capability to existing device');
+      await this.addCapability('dali_level').catch(this.error);
+    }
+
     this.registerCapabilityListener('onoff', this.onCapabilityOnOff.bind(this));
     this.registerCapabilityListener('dim', this.onCapabilityDim.bind(this));
+    this.registerCapabilityListener('dali_level', this.onCapabilityDaliLevel.bind(this));
 
     await this.syncStateFromServer();
   }
@@ -32,6 +44,7 @@ class LightGroupDevice extends Homey.Device {
 
         await this.setCapabilityValue('onoff', isOn).catch(this.error);
         await this.setCapabilityValue('dim', dimValue).catch(this.error);
+        await this.setCapabilityValue('dali_level', group.level).catch(this.error);
 
         this.log('Synced state from server:', {
           isOn, level: group.level, percent, dimValue,
@@ -55,10 +68,12 @@ class LightGroupDevice extends Homey.Device {
       await client.setGroupOn(this.busId, this.groupId);
       // Update dim to 100% when turning on
       await this.setCapabilityValue('dim', 1.0).catch(this.error);
+      await this.setCapabilityValue('dali_level', 254).catch(this.error);
     } else {
       await client.setGroupOff(this.busId, this.groupId);
       // Update dim to 0% when turning off
       await this.setCapabilityValue('dim', 0).catch(this.error);
+      await this.setCapabilityValue('dali_level', 0).catch(this.error);
     }
   }
 
@@ -74,6 +89,7 @@ class LightGroupDevice extends Homey.Device {
     }
 
     const percent = Math.round(value * 100);
+    const level = percentToArc(percent);
 
     await client.setGroupPercent(this.busId, this.groupId, percent);
 
@@ -82,6 +98,40 @@ class LightGroupDevice extends Homey.Device {
     } else {
       await this.setCapabilityValue('onoff', false).catch(this.error);
     }
+
+    // Update dali_level to reflect the change
+    await this.setCapabilityValue('dali_level', level).catch(this.error);
+  }
+
+  async onCapabilityDaliLevel(value: number): Promise<void> {
+    this.log('onCapabilityDaliLevel:', value);
+
+    const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
+    const client = app.getDaliClient();
+
+    if (!client) {
+      this.error('DALI client not initialized. Please configure server URL in app settings.');
+      throw new Error('DALI Hub not connected');
+    }
+
+    const level = Math.round(value);
+
+    await client.setGroupLevel(this.busId, this.groupId, level);
+
+    // Update dim and onoff to reflect the change
+    const percent = arcToPercent(level);
+    const dimValue = percent / 100;
+
+    if (level > 0) {
+      await this.setCapabilityValue('onoff', true).catch(this.error);
+    } else {
+      await this.setCapabilityValue('onoff', false).catch(this.error);
+    }
+
+    await this.setCapabilityValue('dim', dimValue).catch(this.error);
+
+    // Trigger flow card
+    await this.driver.triggerLevelChanged(this, { level }).catch(this.error);
   }
 
   async updateLevelFromEvent(level: number) {
@@ -91,10 +141,14 @@ class LightGroupDevice extends Homey.Device {
 
     await this.setCapabilityValue('onoff', isOn).catch(this.error);
     await this.setCapabilityValue('dim', dimValue).catch(this.error);
+    await this.setCapabilityValue('dali_level', level).catch(this.error);
 
     this.log('Updated from event:', {
       isOn, level, percent, dimValue,
     });
+
+    // Trigger flow card
+    await this.driver.triggerLevelChanged(this, { level }).catch(this.error);
   }
 
   async increaseBrightness(): Promise<void> {

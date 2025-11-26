@@ -147,6 +147,14 @@ export class DaliApiClient {
     });
   }
 
+  async setLightLevel(busId: number, address: number, level: number): Promise<void> {
+    this.log(`🔆 Set Light Level - Bus ${busId}, Address ${address}, Level ${level}`);
+    return this.makePostRequest(`/dali/lights/${address}/level`, {
+      bus: busId,
+      level,
+    });
+  }
+
   async setLightOn(busId: number, address: number): Promise<void> {
     this.log(`💡 Set Light ON - Bus ${busId}, Address ${address}`);
     return this.makePostRequest(`/dali/lights/${address}/on`, {
@@ -183,6 +191,14 @@ export class DaliApiClient {
     });
   }
 
+  async setGroupLevel(busId: number, groupId: number, level: number): Promise<void> {
+    this.log(`🔆 Set Group Level - Bus ${busId}, Group ${groupId}, Level ${level}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/level`, {
+      bus: busId,
+      level,
+    });
+  }
+
   async setGroupOn(busId: number, groupId: number): Promise<void> {
     this.log(`💡 Set Group ON - Bus ${busId}, Group ${groupId}`);
     return this.makePostRequest(`/dali/groups/${groupId}/on`, {
@@ -209,6 +225,28 @@ export class DaliApiClient {
     return this.makePostRequest(`/dali/groups/${groupId}/down`, {
       bus: busId,
     });
+  }
+
+  async recallScene(
+    busId: number,
+    scene: number,
+    targetType: 'address' | 'group' | 'broadcast',
+    targetValue: number,
+  ): Promise<void> {
+    this.log(`🎬 Recall Scene ${scene} - Bus ${busId}, Type ${targetType}, Value ${targetValue}`);
+    const body: Record<string, unknown> = { bus: busId };
+
+    if (targetType === 'address') {
+      body.targetType = 'address';
+      body.targetValue = targetValue;
+    } else if (targetType === 'group') {
+      body.targetType = 'group';
+      body.targetValue = targetValue;
+    } else {
+      body.targetType = 'broadcast';
+    }
+
+    return this.makePostRequest(`/dali/scenes/${scene}/recall`, body);
   }
 
   private makePostRequest(path: string, body: Record<string, unknown>): Promise<void> {

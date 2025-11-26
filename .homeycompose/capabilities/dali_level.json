@@ -1,0 +1,24 @@
+{
+  "type": "number",
+  "title": {
+    "en": "DALI Level",
+    "ko": "DALI 레벨"
+  },
+  "desc": {
+    "en": "Direct DALI arc power level (0-254)",
+    "ko": "직접 DALI 아크 파워 레벨 (0-254)"
+  },
+  "units": {
+    "en": "level",
+    "ko": "레벨"
+  },
+  "min": 0,
+  "max": 254,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": true,
+  "uiComponent": "slider",
+  "uiQuickAction": true,
+  "icon": "/assets/capability_icons/dali_level.svg"
+}

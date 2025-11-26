@@ -1,0 +1,33 @@
+{
+  "title": {
+    "en": "Set DALI level",
+    "ko": "DALI 레벨 설정"
+  },
+  "titleFormatted": {
+    "en": "Set DALI level to [[level]]",
+    "ko": "DALI 레벨을 [[level]]로 설정"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=light-group"
+    },
+    {
+      "type": "range",
+      "name": "level",
+      "title": {
+        "en": "DALI Level",
+        "ko": "DALI 레벨"
+      },
+      "min": 0,
+      "max": 254,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "DALI Level (0-254)",
+        "ko": "DALI 레벨 (0-254)"
+      }
+    }
+  ]
+}

@@ -2,8 +2,13 @@ import Homey from 'homey';
 import { DaliGroup, DaliState } from '../../lib/dali-api';
 
 class LightGroupDriver extends Homey.Driver {
+  private levelChangedTrigger!: Homey.FlowCardTriggerDevice;
+
   async onInit() {
     this.log('LightGroupDriver has been initialized');
+
+    // Register trigger cards
+    this.levelChangedTrigger = this.homey.flow.getDeviceTriggerCard('light-group-level-changed');
 
     // Register action cards
     this.homey.flow.getActionCard('light-group-up')
@@ -14,6 +19,11 @@ class LightGroupDriver extends Homey.Driver {
     this.homey.flow.getActionCard('light-group-down')
       .registerRunListener(async (args) => {
         return args.device.decreaseBrightness();
+      });
+
+    this.homey.flow.getActionCard('light-group-set-level')
+      .registerRunListener(async (args) => {
+        return args.device.setCapabilityValue('dali_level', args.level);
       });
 
     // Register condition cards
@@ -27,6 +37,18 @@ class LightGroupDriver extends Homey.Driver {
       .registerRunListener(async (args) => {
         const currentBrightness = args.device.getCapabilityValue('dim') * 100;
         return currentBrightness < args.brightness;
+      });
+
+    this.homey.flow.getConditionCard('light-group-level-greater')
+      .registerRunListener(async (args) => {
+        const currentLevel = args.device.getCapabilityValue('dali_level');
+        return currentLevel > args.level;
+      });
+
+    this.homey.flow.getConditionCard('light-group-level-less')
+      .registerRunListener(async (args) => {
+        const currentLevel = args.device.getCapabilityValue('dali_level');
+        return currentLevel < args.level;
       });
   }
 
@@ -64,6 +86,10 @@ class LightGroupDriver extends Homey.Driver {
 
     this.log('Found light groups:', devices.length);
     return devices;
+  }
+
+  async triggerLevelChanged(device: Homey.Device, tokens: { level: number }) {
+    return this.levelChangedTrigger.trigger(device, tokens);
   }
 }
 

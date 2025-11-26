@@ -36,5 +36,15 @@
     "name": "nIoT Inc.",
     "email": "support@niot.me"
   },
-  "support": "mailto:support@niot.me"
+  "support": "mailto:support@niot.me",
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "wonshikkim"
+      },
+      "githubSponsors": {
+         "username": "wokim"
+       }
+    }
+  }
 }

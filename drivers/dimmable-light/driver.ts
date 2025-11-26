@@ -2,8 +2,13 @@ import Homey from 'homey';
 import { DaliGear, DaliState } from '../../lib/dali-api';
 
 class DimmableLightDriver extends Homey.Driver {
+  private levelChangedTrigger!: Homey.FlowCardTriggerDevice;
+
   async onInit() {
     this.log('DimmableLightDriver has been initialized');
+
+    // Register trigger cards
+    this.levelChangedTrigger = this.homey.flow.getDeviceTriggerCard('dimmable-light-level-changed');
 
     // Register action cards
     this.homey.flow.getActionCard('dimmable-light-up')
@@ -14,6 +19,11 @@ class DimmableLightDriver extends Homey.Driver {
     this.homey.flow.getActionCard('dimmable-light-down')
       .registerRunListener(async (args) => {
         return args.device.decreaseBrightness();
+      });
+
+    this.homey.flow.getActionCard('dimmable-light-set-level')
+      .registerRunListener(async (args) => {
+        return args.device.setCapabilityValue('dali_level', args.level);
       });
 
     // Register condition cards
@@ -27,6 +37,18 @@ class DimmableLightDriver extends Homey.Driver {
       .registerRunListener(async (args) => {
         const currentBrightness = args.device.getCapabilityValue('dim') * 100;
         return currentBrightness < args.brightness;
+      });
+
+    this.homey.flow.getConditionCard('dimmable-light-level-greater')
+      .registerRunListener(async (args) => {
+        const currentLevel = args.device.getCapabilityValue('dali_level');
+        return currentLevel > args.level;
+      });
+
+    this.homey.flow.getConditionCard('dimmable-light-level-less')
+      .registerRunListener(async (args) => {
+        const currentLevel = args.device.getCapabilityValue('dali_level');
+        return currentLevel < args.level;
       });
   }
 
@@ -65,6 +87,10 @@ class DimmableLightDriver extends Homey.Driver {
 
     this.log('Found dimmable lights:', devices.length);
     return devices;
+  }
+
+  async triggerLevelChanged(device: Homey.Device, tokens: { level: number }) {
+    return this.levelChangedTrigger.trigger(device, tokens);
   }
 }
 

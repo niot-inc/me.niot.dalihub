@@ -1,0 +1,33 @@
+{
+  "title": {
+    "en": "Recall scene (broadcast)",
+    "ko": "씬 호출 (브로드캐스트)"
+  },
+  "titleFormatted": {
+    "en": "Recall scene [[scene]] to all devices",
+    "ko": "모든 디바이스에 씬 [[scene]] 호출"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=scene-controller"
+    },
+    {
+      "type": "range",
+      "name": "scene",
+      "title": {
+        "en": "Scene",
+        "ko": "씬"
+      },
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Scene (0-15)",
+        "ko": "씬 (0-15)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "scene-controller",
+  "name": {
+    "en": "DALI Scene Controller",
+    "ko": "DALI 씬 컨트롤러"
+  },
+  "class": "other",
+  "capabilities": [],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "/drivers/scene-controller/assets/images/small.png",
+    "large": "/drivers/scene-controller/assets/images/large.png",
+    "xlarge": "/drivers/scene-controller/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}
