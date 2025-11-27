@@ -46,5 +46,10 @@
         "username": "wokim"
       }
     }
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/niot-inc/me.niot.dalihub/issues"
+  },
+  "homepage": "https://github.com/niot-inc/me.niot.dalihub",
+  "source": "https://github.com/niot-inc/me.niot.dalihub"
 }
