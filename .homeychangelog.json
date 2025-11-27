@@ -25,5 +25,8 @@
   },
   "1.0.8": {
     "en": "Add DALI level control capabilities and scene management features."
+  },
+  "1.0.9": {
+    "en": "Enhance README files with detailed feature descriptions and device support."
   }
 }
