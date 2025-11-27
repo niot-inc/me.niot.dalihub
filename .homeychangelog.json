@@ -28,5 +28,8 @@
   },
   "1.0.9": {
     "en": "Enhance README files with detailed feature descriptions and device support."
+  },
+  "1.0.10": {
+    "en": "Refactor DALI level handling in dimmable light and light group drivers."
   }
 }
