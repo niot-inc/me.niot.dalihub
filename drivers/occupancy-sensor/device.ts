@@ -60,13 +60,17 @@ class OccupancySensorDevice extends Homey.Device {
       this.occupancyState = newState;
 
       this.log('Triggering flow card with state:', newState);
-      await this.occupancyStateChangedFlow.trigger(
-        this,
-        { state: newState },
-        { state: newState },
-      ).catch((err) => {
-        this.error('Failed to trigger flow card:', err);
-      });
+      if (this.occupancyStateChangedFlow) {
+        await this.occupancyStateChangedFlow.trigger(
+          this,
+          { state: newState },
+          { state: newState },
+        ).catch((err) => {
+          this.error('Failed to trigger flow card:', err);
+        });
+      } else {
+        this.error('Flow card not initialized yet');
+      }
     }
   }
 

@@ -23,7 +23,7 @@ class DimmableLightDriver extends Homey.Driver {
 
     this.homey.flow.getActionCard('dimmable-light-set-level')
       .registerRunListener(async (args) => {
-        return args.device.setCapabilityValue('dali_level', args.level);
+        return args.device.setDaliLevel(args.level);
       });
 
     // Register condition cards

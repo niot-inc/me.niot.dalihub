@@ -104,7 +104,11 @@ class LightGroupDevice extends Homey.Device {
   }
 
   async onCapabilityDaliLevel(value: number): Promise<void> {
-    this.log('onCapabilityDaliLevel:', value);
+    await this.setDaliLevel(value);
+  }
+
+  async setDaliLevel(value: number): Promise<void> {
+    this.log('setDaliLevel:', value);
 
     const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
     const client = app.getDaliClient();
@@ -129,6 +133,7 @@ class LightGroupDevice extends Homey.Device {
     }
 
     await this.setCapabilityValue('dim', dimValue).catch(this.error);
+    await this.setCapabilityValue('dali_level', level).catch(this.error);
 
     // Trigger flow card
     await this.driver.triggerLevelChanged(this, { level }).catch(this.error);
