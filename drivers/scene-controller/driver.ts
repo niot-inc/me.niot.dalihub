@@ -44,7 +44,7 @@ class SceneControllerDriver extends Homey.Driver {
     const devices = [];
     for (let busId = 0; busId < 4; busId++) {
       devices.push({
-        name: this.homey.__('pair.scene_controller_name', { busId }),
+        name: `DALI 씬 컨트롤러 (버스 ${busId})`,
         data: {
           id: `scene-controller-bus-${busId}`,
           busId,
