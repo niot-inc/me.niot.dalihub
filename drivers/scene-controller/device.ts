@@ -11,8 +11,8 @@ class SceneControllerDevice extends Homey.Device {
     this.log('SceneControllerDevice has been initialized:', this.getName(), `(Bus ${this.busId})`);
   }
 
-  async recallScene(scene: number, targetType: 'address' | 'group' | 'broadcast', targetValue: number): Promise<void> {
-    this.log(`Recalling scene ${scene} with targetType ${targetType}, targetValue ${targetValue}`);
+  async recallScene(scene: number, targetType: 'address' | 'group' | 'broadcast', targetValue: number, fadeTime?: number): Promise<void> {
+    this.log(`Recalling scene ${scene} with targetType ${targetType}, targetValue ${targetValue}${fadeTime !== undefined ? `, fadeTime ${fadeTime}` : ''}`);
 
     const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
     const client = app.getDaliClient();
@@ -22,7 +22,7 @@ class SceneControllerDevice extends Homey.Device {
       throw new Error('DALI Hub not connected');
     }
 
-    await client.recallScene(this.busId, scene, targetType, targetValue);
+    await client.recallScene(this.busId, scene, targetType, targetValue, fadeTime);
   }
 
   async onDeleted() {

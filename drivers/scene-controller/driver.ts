@@ -19,6 +19,24 @@ class SceneControllerDriver extends Homey.Driver {
       .registerRunListener(async (args) => {
         return args.device.recallScene(args.scene, 'broadcast', 0);
       });
+
+    this.homey.flow.getActionCard('scene-recall-address-with-fade')
+      .registerRunListener(async (args) => {
+        const fadeTime = parseInt(args.fadeTime, 10);
+        return args.device.recallScene(args.scene, 'address', args.address, fadeTime);
+      });
+
+    this.homey.flow.getActionCard('scene-recall-group-with-fade')
+      .registerRunListener(async (args) => {
+        const fadeTime = parseInt(args.fadeTime, 10);
+        return args.device.recallScene(args.scene, 'group', args.group, fadeTime);
+      });
+
+    this.homey.flow.getActionCard('scene-recall-broadcast-with-fade')
+      .registerRunListener(async (args) => {
+        const fadeTime = parseInt(args.fadeTime, 10);
+        return args.device.recallScene(args.scene, 'broadcast', 0, fadeTime);
+      });
   }
 
   async onPairListDevices() {
@@ -26,7 +44,7 @@ class SceneControllerDriver extends Homey.Driver {
     const devices = [];
     for (let busId = 0; busId < 4; busId++) {
       devices.push({
-        name: `DALI Scene Controller (Bus ${busId})`,
+        name: this.homey.__('pair.scene_controller_name', { busId }),
         data: {
           id: `scene-controller-bus-${busId}`,
           busId,

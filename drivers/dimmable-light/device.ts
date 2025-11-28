@@ -107,8 +107,8 @@ class DimmableLightDevice extends Homey.Device {
     await this.setDaliLevel(value);
   }
 
-  async setDaliLevel(value: number): Promise<void> {
-    this.log('setDaliLevel:', value);
+  async setDaliLevel(value: number, fadeTime?: number): Promise<void> {
+    this.log('setDaliLevel:', value, fadeTime !== undefined ? `fadeTime: ${fadeTime}` : '');
 
     const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
     const client = app.getDaliClient();
@@ -120,7 +120,7 @@ class DimmableLightDevice extends Homey.Device {
 
     const level = Math.round(value);
 
-    await client.setLightLevel(this.busId, this.address, level);
+    await client.setLightLevel(this.busId, this.address, level, fadeTime);
 
     // Update dim and onoff to reflect the change
     const percent = arcToPercent(level);
@@ -134,6 +134,36 @@ class DimmableLightDevice extends Homey.Device {
 
     await this.setCapabilityValue('dim', dimValue).catch(this.error);
     await this.setCapabilityValue('dali_level', level).catch(this.error);
+
+    // Trigger flow card
+    await this.driver.triggerLevelChanged(this, { level }).catch(this.error);
+  }
+
+  async setDimWithFade(brightness: number, fadeTime: number): Promise<void> {
+    this.log('setDimWithFade:', brightness, 'fadeTime:', fadeTime);
+
+    const app = this.homey.app as unknown as { getDaliClient: () => DaliApiClient | undefined };
+    const client = app.getDaliClient();
+
+    if (!client) {
+      this.error('DALI client not initialized. Please configure server URL in app settings.');
+      throw new Error('DALI Hub not connected');
+    }
+
+    const percent = Math.round(brightness);
+    const level = percentToArc(percent);
+
+    await client.setLightPercent(this.busId, this.address, percent, fadeTime);
+
+    if (percent > 0) {
+      await this.setCapabilityValue('onoff', true).catch(this.error);
+    } else {
+      await this.setCapabilityValue('onoff', false).catch(this.error);
+    }
+
+    // Update dali_level to reflect the change
+    await this.setCapabilityValue('dali_level', level).catch(this.error);
+    await this.setCapabilityValue('dim', brightness / 100).catch(this.error);
 
     // Trigger flow card
     await this.driver.triggerLevelChanged(this, { level }).catch(this.error);

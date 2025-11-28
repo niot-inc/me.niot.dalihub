@@ -1,0 +1,155 @@
+{
+  "title": {
+    "en": "Recall scene (broadcast) with fade time",
+    "ko": "페이드 시간과 함께 씬 호출 (브로드캐스트)"
+  },
+  "titleFormatted": {
+    "en": "Recall scene [[scene]] to all devices with fade time [[fadeTime]]",
+    "ko": "모든 디바이스에 씬 [[scene]]을 페이드 시간 [[fadeTime]]과 함께 호출"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=scene-controller"
+    },
+    {
+      "type": "range",
+      "name": "scene",
+      "title": {
+        "en": "Scene",
+        "ko": "씬"
+      },
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Scene (0-15)",
+        "ko": "씬 (0-15)"
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "fadeTime",
+      "title": {
+        "en": "Fade Time",
+        "ko": "페이드 시간"
+      },
+      "values": [
+        {
+          "id": "0",
+          "label": {
+            "en": "Fastest",
+            "ko": "가장 빠름"
+          }
+        },
+        {
+          "id": "1",
+          "label": {
+            "en": "0.7s",
+            "ko": "0.7초"
+          }
+        },
+        {
+          "id": "2",
+          "label": {
+            "en": "1.0s",
+            "ko": "1.0초"
+          }
+        },
+        {
+          "id": "3",
+          "label": {
+            "en": "1.4s",
+            "ko": "1.4초"
+          }
+        },
+        {
+          "id": "4",
+          "label": {
+            "en": "2.0s",
+            "ko": "2.0초"
+          }
+        },
+        {
+          "id": "5",
+          "label": {
+            "en": "2.8s",
+            "ko": "2.8초"
+          }
+        },
+        {
+          "id": "6",
+          "label": {
+            "en": "4.0s",
+            "ko": "4.0초"
+          }
+        },
+        {
+          "id": "7",
+          "label": {
+            "en": "5.7s",
+            "ko": "5.7초"
+          }
+        },
+        {
+          "id": "8",
+          "label": {
+            "en": "8.0s",
+            "ko": "8.0초"
+          }
+        },
+        {
+          "id": "9",
+          "label": {
+            "en": "11.3s",
+            "ko": "11.3초"
+          }
+        },
+        {
+          "id": "10",
+          "label": {
+            "en": "16.0s",
+            "ko": "16.0초"
+          }
+        },
+        {
+          "id": "11",
+          "label": {
+            "en": "22.6s",
+            "ko": "22.6초"
+          }
+        },
+        {
+          "id": "12",
+          "label": {
+            "en": "32.0s",
+            "ko": "32.0초"
+          }
+        },
+        {
+          "id": "13",
+          "label": {
+            "en": "45.3s",
+            "ko": "45.3초"
+          }
+        },
+        {
+          "id": "14",
+          "label": {
+            "en": "64.0s",
+            "ko": "64.0초"
+          }
+        },
+        {
+          "id": "15",
+          "label": {
+            "en": "90.5s",
+            "ko": "90.5초"
+          }
+        }
+      ]
+    }
+  ]
+}

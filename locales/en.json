@@ -1,1 +1,5 @@
-{}
+{
+  "pair": {
+    "scene_controller_name": "DALI Scene Controller (Bus {{busId}})"
+  }
+}

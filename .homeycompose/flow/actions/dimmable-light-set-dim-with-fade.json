@@ -1,0 +1,155 @@
+{
+  "title": {
+    "en": "Set brightness with fade time",
+    "ko": "페이드 시간과 함께 밝기 설정"
+  },
+  "titleFormatted": {
+    "en": "Set brightness to [[brightness]]% with fade time [[fadeTime]]",
+    "ko": "밝기를 [[brightness]]%로 페이드 시간 [[fadeTime]]과 함께 설정"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dimmable-light"
+    },
+    {
+      "type": "range",
+      "name": "brightness",
+      "title": {
+        "en": "Brightness",
+        "ko": "밝기"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Brightness (%)",
+        "ko": "밝기 (%)"
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "fadeTime",
+      "title": {
+        "en": "Fade Time",
+        "ko": "페이드 시간"
+      },
+      "values": [
+        {
+          "id": "0",
+          "label": {
+            "en": "Fastest",
+            "ko": "가장 빠름"
+          }
+        },
+        {
+          "id": "1",
+          "label": {
+            "en": "0.7s",
+            "ko": "0.7초"
+          }
+        },
+        {
+          "id": "2",
+          "label": {
+            "en": "1.0s",
+            "ko": "1.0초"
+          }
+        },
+        {
+          "id": "3",
+          "label": {
+            "en": "1.4s",
+            "ko": "1.4초"
+          }
+        },
+        {
+          "id": "4",
+          "label": {
+            "en": "2.0s",
+            "ko": "2.0초"
+          }
+        },
+        {
+          "id": "5",
+          "label": {
+            "en": "2.8s",
+            "ko": "2.8초"
+          }
+        },
+        {
+          "id": "6",
+          "label": {
+            "en": "4.0s",
+            "ko": "4.0초"
+          }
+        },
+        {
+          "id": "7",
+          "label": {
+            "en": "5.7s",
+            "ko": "5.7초"
+          }
+        },
+        {
+          "id": "8",
+          "label": {
+            "en": "8.0s",
+            "ko": "8.0초"
+          }
+        },
+        {
+          "id": "9",
+          "label": {
+            "en": "11.3s",
+            "ko": "11.3초"
+          }
+        },
+        {
+          "id": "10",
+          "label": {
+            "en": "16.0s",
+            "ko": "16.0초"
+          }
+        },
+        {
+          "id": "11",
+          "label": {
+            "en": "22.6s",
+            "ko": "22.6초"
+          }
+        },
+        {
+          "id": "12",
+          "label": {
+            "en": "32.0s",
+            "ko": "32.0초"
+          }
+        },
+        {
+          "id": "13",
+          "label": {
+            "en": "45.3s",
+            "ko": "45.3초"
+          }
+        },
+        {
+          "id": "14",
+          "label": {
+            "en": "64.0s",
+            "ko": "64.0초"
+          }
+        },
+        {
+          "id": "15",
+          "label": {
+            "en": "90.5s",
+            "ko": "90.5초"
+          }
+        }
+      ]
+    }
+  ]
+}

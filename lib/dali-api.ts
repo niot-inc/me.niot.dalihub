@@ -139,20 +139,28 @@ export class DaliApiClient {
     });
   }
 
-  async setLightPercent(busId: number, address: number, percent: number): Promise<void> {
-    this.log(`🔆 Set Light Percent - Bus ${busId}, Address ${address}, Percent ${percent}%`);
-    return this.makePostRequest(`/dali/lights/${address}/percent`, {
+  async setLightPercent(busId: number, address: number, percent: number, fadeTime?: number): Promise<void> {
+    this.log(`🔆 Set Light Percent - Bus ${busId}, Address ${address}, Percent ${percent}%${fadeTime !== undefined ? `, Fade Time ${fadeTime}` : ''}`);
+    const body: Record<string, unknown> = {
       bus: busId,
       percent,
-    });
+    };
+    if (fadeTime !== undefined) {
+      body.fadeTime = fadeTime;
+    }
+    return this.makePostRequest(`/dali/lights/${address}/percent`, body);
   }
 
-  async setLightLevel(busId: number, address: number, level: number): Promise<void> {
-    this.log(`🔆 Set Light Level - Bus ${busId}, Address ${address}, Level ${level}`);
-    return this.makePostRequest(`/dali/lights/${address}/level`, {
+  async setLightLevel(busId: number, address: number, level: number, fadeTime?: number): Promise<void> {
+    this.log(`🔆 Set Light Level - Bus ${busId}, Address ${address}, Level ${level}${fadeTime !== undefined ? `, Fade Time ${fadeTime}` : ''}`);
+    const body: Record<string, unknown> = {
       bus: busId,
       level,
-    });
+    };
+    if (fadeTime !== undefined) {
+      body.fadeTime = fadeTime;
+    }
+    return this.makePostRequest(`/dali/lights/${address}/level`, body);
   }
 
   async setLightOn(busId: number, address: number): Promise<void> {
@@ -183,20 +191,28 @@ export class DaliApiClient {
     });
   }
 
-  async setGroupPercent(busId: number, groupId: number, percent: number): Promise<void> {
-    this.log(`🔆 Set Group Percent - Bus ${busId}, Group ${groupId}, Percent ${percent}%`);
-    return this.makePostRequest(`/dali/groups/${groupId}/percent`, {
+  async setGroupPercent(busId: number, groupId: number, percent: number, fadeTime?: number): Promise<void> {
+    this.log(`🔆 Set Group Percent - Bus ${busId}, Group ${groupId}, Percent ${percent}%${fadeTime !== undefined ? `, Fade Time ${fadeTime}` : ''}`);
+    const body: Record<string, unknown> = {
       bus: busId,
       percent,
-    });
+    };
+    if (fadeTime !== undefined) {
+      body.fadeTime = fadeTime;
+    }
+    return this.makePostRequest(`/dali/groups/${groupId}/percent`, body);
   }
 
-  async setGroupLevel(busId: number, groupId: number, level: number): Promise<void> {
-    this.log(`🔆 Set Group Level - Bus ${busId}, Group ${groupId}, Level ${level}`);
-    return this.makePostRequest(`/dali/groups/${groupId}/level`, {
+  async setGroupLevel(busId: number, groupId: number, level: number, fadeTime?: number): Promise<void> {
+    this.log(`🔆 Set Group Level - Bus ${busId}, Group ${groupId}, Level ${level}${fadeTime !== undefined ? `, Fade Time ${fadeTime}` : ''}`);
+    const body: Record<string, unknown> = {
       bus: busId,
       level,
-    });
+    };
+    if (fadeTime !== undefined) {
+      body.fadeTime = fadeTime;
+    }
+    return this.makePostRequest(`/dali/groups/${groupId}/level`, body);
   }
 
   async setGroupOn(busId: number, groupId: number): Promise<void> {
@@ -232,8 +248,9 @@ export class DaliApiClient {
     scene: number,
     targetType: 'address' | 'group' | 'broadcast',
     targetValue: number,
+    fadeTime?: number,
   ): Promise<void> {
-    this.log(`🎬 Recall Scene ${scene} - Bus ${busId}, Type ${targetType}, Value ${targetValue}`);
+    this.log(`🎬 Recall Scene ${scene} - Bus ${busId}, Type ${targetType}, Value ${targetValue}${fadeTime !== undefined ? `, Fade Time ${fadeTime}` : ''}`);
     const body: Record<string, unknown> = { bus: busId };
 
     if (targetType === 'address') {
@@ -244,6 +261,10 @@ export class DaliApiClient {
       body.targetValue = targetValue;
     } else {
       body.targetType = 'broadcast';
+    }
+
+    if (fadeTime !== undefined) {
+      body.fadeTime = fadeTime;
     }
 
     return this.makePostRequest(`/dali/scenes/${scene}/recall`, body);
