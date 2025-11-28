@@ -5,7 +5,8 @@ DALIHub connects your DALI lighting system to Homey, giving you full control ove
 Features:
 • Control DT6 and DT7 DALI lights with precise dimming (DT8 color control coming soon!)
 • Direct DALI level control (0-254) for sub-1% dimming precision
-• Scene controller for recalling DALI scenes
+• Smooth transitions with fade time control (16 preset options from 0.7s to 90.5s)
+• Scene controller for recalling DALI scenes with fade time support
 • Create automations with occupancy sensors (tested with Lunatone DALI-2 CS)
 • Lux sensors for ambient light measurement (tested with Lunatone DALI-2 CS)
 • Organize lights into groups for zone control
