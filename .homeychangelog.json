@@ -31,5 +31,8 @@
   },
   "1.0.10": {
     "en": "Refactor DALI level handling in dimmable light and light group drivers."
+  },
+  "1.1.0": {
+    "en": "Add fade time functionality for brightness and DALI level adjustments in dimmable light and light group drivers; implement new flow actions for setting brightness and DALI levels with fade time."
   }
 }
