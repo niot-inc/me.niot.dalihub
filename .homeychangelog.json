@@ -34,5 +34,8 @@
   },
   "1.1.0": {
     "en": "Add fade time functionality for brightness and DALI level adjustments in dimmable light and light group drivers; implement new flow actions for setting brightness and DALI levels with fade time."
+  },
+  "1.1.1": {
+    "en": "Update scene controller device name to include Korean translation for improved localization."
   }
 }
