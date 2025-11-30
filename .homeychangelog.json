@@ -37,5 +37,8 @@
   },
   "1.1.1": {
     "en": "Update scene controller device name to include Korean translation for improved localization."
+  },
+  "1.1.2": {
+    "en": "Add DALI controller support with new actions for setting group and light max levels"
   }
 }
