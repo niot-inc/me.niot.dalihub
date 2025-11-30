@@ -4,14 +4,30 @@
     "ko": "씬 호출 (브로드캐스트)"
   },
   "titleFormatted": {
-    "en": "Recall scene [[scene]] to all devices",
-    "ko": "모든 디바이스에 씬 [[scene]] 호출"
+    "en": "Recall scene [[scene]] to all devices on bus [[bus]]",
+    "ko": "버스 [[bus]]의 모든 디바이스에 씬 [[scene]] 호출"
   },
   "args": [
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=scene-controller"
+      "filter": "driver_id=dali-controller"
+    },
+    {
+      "type": "range",
+      "name": "bus",
+      "title": {
+        "en": "Bus",
+        "ko": "버스"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Bus (0-3)",
+        "ko": "버스 (0-3)"
+      }
     },
     {
       "type": "range",

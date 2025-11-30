@@ -4,14 +4,30 @@
     "ko": "페이드 시간과 함께 그룹에 씬 호출"
   },
   "titleFormatted": {
-    "en": "Recall scene [[scene]] to group [[group]] with fade time [[fadeTime]]",
-    "ko": "그룹 [[group]]에 씬 [[scene]]을 페이드 시간 [[fadeTime]]과 함께 호출"
+    "en": "Recall scene [[scene]] to group [[group]] on bus [[bus]] with fade time [[fadeTime]]",
+    "ko": "버스 [[bus]]의 그룹 [[group]]에 씬 [[scene]]을 페이드 시간 [[fadeTime]]과 함께 호출"
   },
   "args": [
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=scene-controller"
+      "filter": "driver_id=dali-controller"
+    },
+    {
+      "type": "range",
+      "name": "bus",
+      "title": {
+        "en": "Bus",
+        "ko": "버스"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Bus (0-3)",
+        "ko": "버스 (0-3)"
+      }
     },
     {
       "type": "range",

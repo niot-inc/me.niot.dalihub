@@ -1,11 +1,11 @@
 {
   "title": {
-    "en": "Recall scene to address",
-    "ko": "주소에 씬 호출"
+    "en": "Set group max level",
+    "ko": "그룹 최대 밝기 설정"
   },
   "titleFormatted": {
-    "en": "Recall scene [[scene]] to address [[address]] on bus [[bus]]",
-    "ko": "버스 [[bus]]의 주소 [[address]]에 씬 [[scene]] 호출"
+    "en": "Set group [[group]] max level to [[level]] on bus [[bus]]",
+    "ko": "버스 [[bus]]의 그룹 [[group]] 최대 밝기를 [[level]]로 설정"
   },
   "args": [
     {
@@ -31,34 +31,34 @@
     },
     {
       "type": "range",
-      "name": "scene",
+      "name": "group",
       "title": {
-        "en": "Scene",
-        "ko": "씬"
+        "en": "Group",
+        "ko": "그룹"
       },
       "min": 0,
       "max": 15,
       "step": 1,
       "labelDecimals": 0,
       "placeholder": {
-        "en": "Scene (0-15)",
-        "ko": "씬 (0-15)"
+        "en": "Group (0-15)",
+        "ko": "그룹 (0-15)"
       }
     },
     {
       "type": "range",
-      "name": "address",
+      "name": "level",
       "title": {
-        "en": "Address",
-        "ko": "주소"
+        "en": "Max Level",
+        "ko": "최대 밝기"
       },
       "min": 0,
-      "max": 63,
+      "max": 254,
       "step": 1,
       "labelDecimals": 0,
       "placeholder": {
-        "en": "Address (0-63)",
-        "ko": "주소 (0-63)"
+        "en": "Level (0-254)",
+        "ko": "밝기 (0-254)"
       }
     }
   ]

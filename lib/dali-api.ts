@@ -270,6 +270,38 @@ export class DaliApiClient {
     return this.makePostRequest(`/dali/scenes/${scene}/recall`, body);
   }
 
+  async setGroupMaxLevel(busId: number, groupId: number, level: number): Promise<void> {
+    this.log(`🔆 Set Group Max Level - Bus ${busId}, Group ${groupId}, Max Level ${level}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/set-max-level`, {
+      bus: busId,
+      level,
+    });
+  }
+
+  async setGroupMaxLevelPercent(busId: number, groupId: number, percent: number): Promise<void> {
+    this.log(`🔆 Set Group Max Level Percent - Bus ${busId}, Group ${groupId}, Max Percent ${percent}%`);
+    return this.makePostRequest(`/dali/groups/${groupId}/set-max-level-percent`, {
+      bus: busId,
+      percent,
+    });
+  }
+
+  async setLightMaxLevel(busId: number, address: number, level: number): Promise<void> {
+    this.log(`🔆 Set Light Max Level - Bus ${busId}, Address ${address}, Max Level ${level}`);
+    return this.makePostRequest(`/dali/lights/${address}/set-max-level`, {
+      bus: busId,
+      level,
+    });
+  }
+
+  async setLightMaxLevelPercent(busId: number, address: number, percent: number): Promise<void> {
+    this.log(`🔆 Set Light Max Level Percent - Bus ${busId}, Address ${address}, Max Percent ${percent}%`);
+    return this.makePostRequest(`/dali/lights/${address}/set-max-level-percent`, {
+      bus: busId,
+      percent,
+    });
+  }
+
   private makePostRequest(path: string, body: Record<string, unknown>): Promise<void> {
     return new Promise((resolve, reject) => {
       const url = new URL(path, this.baseUrl);

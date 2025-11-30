@@ -1,8 +1,8 @@
 {
-  "id": "scene-controller",
+  "id": "dali-controller",
   "name": {
-    "en": "DALI Scene Controller",
-    "ko": "DALI 씬 컨트롤러"
+    "en": "DALI Controller",
+    "ko": "DALI 컨트롤러"
   },
   "class": "other",
   "capabilities": [],
@@ -13,9 +13,9 @@
     "lan"
   ],
   "images": {
-    "small": "/drivers/scene-controller/assets/images/small.png",
-    "large": "/drivers/scene-controller/assets/images/large.png",
-    "xlarge": "/drivers/scene-controller/assets/images/xlarge.png"
+    "small": "/drivers/dali-controller/assets/images/small.png",
+    "large": "/drivers/dali-controller/assets/images/large.png",
+    "xlarge": "/drivers/dali-controller/assets/images/xlarge.png"
   },
   "pair": [
     {
