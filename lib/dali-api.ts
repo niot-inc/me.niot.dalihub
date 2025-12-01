@@ -302,6 +302,58 @@ export class DaliApiClient {
     });
   }
 
+  async storeLightScene(busId: number, address: number, scene: number, level: number): Promise<void> {
+    this.log(`💾 Store Light Scene - Bus ${busId}, Address ${address}, Scene ${scene}, Level ${level}`);
+    return this.makePostRequest(`/dali/lights/${address}/store-scene`, {
+      bus: busId,
+      scene,
+      level,
+    });
+  }
+
+  async storeLightScenePercent(busId: number, address: number, scene: number, percent: number): Promise<void> {
+    this.log(`💾 Store Light Scene Percent - Bus ${busId}, Address ${address}, Scene ${scene}, Percent ${percent}%`);
+    return this.makePostRequest(`/dali/lights/${address}/store-scene-percent`, {
+      bus: busId,
+      scene,
+      percent,
+    });
+  }
+
+  async removeLightScene(busId: number, address: number, scene: number): Promise<void> {
+    this.log(`🗑️ Remove Light Scene - Bus ${busId}, Address ${address}, Scene ${scene}`);
+    return this.makePostRequest(`/dali/lights/${address}/remove-scene`, {
+      bus: busId,
+      scene,
+    });
+  }
+
+  async storeGroupScene(busId: number, groupId: number, scene: number, level: number): Promise<void> {
+    this.log(`💾 Store Group Scene - Bus ${busId}, Group ${groupId}, Scene ${scene}, Level ${level}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/store-scene`, {
+      bus: busId,
+      scene,
+      level,
+    });
+  }
+
+  async storeGroupScenePercent(busId: number, groupId: number, scene: number, percent: number): Promise<void> {
+    this.log(`💾 Store Group Scene Percent - Bus ${busId}, Group ${groupId}, Scene ${scene}, Percent ${percent}%`);
+    return this.makePostRequest(`/dali/groups/${groupId}/store-scene-percent`, {
+      bus: busId,
+      scene,
+      percent,
+    });
+  }
+
+  async removeGroupScene(busId: number, groupId: number, scene: number): Promise<void> {
+    this.log(`🗑️ Remove Group Scene - Bus ${busId}, Group ${groupId}, Scene ${scene}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/remove-scene`, {
+      bus: busId,
+      scene,
+    });
+  }
+
   private makePostRequest(path: string, body: Record<string, unknown>): Promise<void> {
     return new Promise((resolve, reject) => {
       const url = new URL(path, this.baseUrl);

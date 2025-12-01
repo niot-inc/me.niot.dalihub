@@ -1,0 +1,81 @@
+{
+  "title": {
+    "en": "Store group scene (percent)",
+    "ko": "그룹 씬 저장 (%)"
+  },
+  "titleFormatted": {
+    "en": "Store scene [[scene]] for group [[group]] with [[percent]]% on bus [[bus]]",
+    "ko": "버스 [[bus]]의 그룹 [[group]]에 씬 [[scene]]을 [[percent]]%로 저장"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dali-controller"
+    },
+    {
+      "type": "range",
+      "name": "bus",
+      "title": {
+        "en": "Bus",
+        "ko": "버스"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Bus (0-3)",
+        "ko": "버스 (0-3)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "group",
+      "title": {
+        "en": "Group",
+        "ko": "그룹"
+      },
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Group (0-15)",
+        "ko": "그룹 (0-15)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "scene",
+      "title": {
+        "en": "Scene",
+        "ko": "씬"
+      },
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Scene (0-15)",
+        "ko": "씬 (0-15)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "percent",
+      "title": {
+        "en": "Percent",
+        "ko": "밝기 (%)"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Percent (0-100)",
+        "ko": "퍼센트 (0-100)"
+      }
+    }
+  ]
+}

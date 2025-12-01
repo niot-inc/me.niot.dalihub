@@ -1,0 +1,81 @@
+{
+  "title": {
+    "en": "Store light scene",
+    "ko": "조명 씬 저장"
+  },
+  "titleFormatted": {
+    "en": "Store scene [[scene]] for light [[address]] with level [[level]] on bus [[bus]]",
+    "ko": "버스 [[bus]]의 조명 [[address]]에 씬 [[scene]]을 레벨 [[level]]로 저장"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dali-controller"
+    },
+    {
+      "type": "range",
+      "name": "bus",
+      "title": {
+        "en": "Bus",
+        "ko": "버스"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Bus (0-3)",
+        "ko": "버스 (0-3)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "address",
+      "title": {
+        "en": "Address",
+        "ko": "주소"
+      },
+      "min": 0,
+      "max": 63,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Address (0-63)",
+        "ko": "주소 (0-63)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "scene",
+      "title": {
+        "en": "Scene",
+        "ko": "씬"
+      },
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Scene (0-15)",
+        "ko": "씬 (0-15)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "level",
+      "title": {
+        "en": "Level",
+        "ko": "밝기"
+      },
+      "min": 0,
+      "max": 254,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Level (0-254)",
+        "ko": "밝기 (0-254)"
+      }
+    }
+  ]
+}

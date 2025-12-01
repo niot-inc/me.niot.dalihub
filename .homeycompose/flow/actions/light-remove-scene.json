@@ -1,0 +1,65 @@
+{
+  "title": {
+    "en": "Remove light scene",
+    "ko": "조명 씬 삭제"
+  },
+  "titleFormatted": {
+    "en": "Remove scene [[scene]] from light [[address]] on bus [[bus]]",
+    "ko": "버스 [[bus]]의 조명 [[address]]에서 씬 [[scene]] 삭제"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dali-controller"
+    },
+    {
+      "type": "range",
+      "name": "bus",
+      "title": {
+        "en": "Bus",
+        "ko": "버스"
+      },
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Bus (0-3)",
+        "ko": "버스 (0-3)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "address",
+      "title": {
+        "en": "Address",
+        "ko": "주소"
+      },
+      "min": 0,
+      "max": 63,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Address (0-63)",
+        "ko": "주소 (0-63)"
+      }
+    },
+    {
+      "type": "range",
+      "name": "scene",
+      "title": {
+        "en": "Scene",
+        "ko": "씬"
+      },
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "labelDecimals": 0,
+      "placeholder": {
+        "en": "Scene (0-15)",
+        "ko": "씬 (0-15)"
+      }
+    }
+  ]
+}
