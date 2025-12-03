@@ -40,5 +40,8 @@
   },
   "1.1.2": {
     "en": "Add DALI controller support with new actions for setting group and light max levels"
+  },
+  "1.1.3": {
+    "en": "Update README to clarify DALIHub requirements."
   }
 }
