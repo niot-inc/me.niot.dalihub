@@ -953,6 +953,72 @@
       },
       {
         "title": {
+          "en": "Remove group scene",
+          "ko": "그룹 씬 삭제"
+        },
+        "titleFormatted": {
+          "en": "Remove scene [[scene]] from group [[group]] on bus [[bus]]",
+          "ko": "버스 [[bus]]의 그룹 [[group]]에서 씬 [[scene]] 삭제"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Bus (0-3)",
+              "ko": "버스 (0-3)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "group",
+            "title": {
+              "en": "Group",
+              "ko": "그룹"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Group (0-15)",
+              "ko": "그룹 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          }
+        ],
+        "id": "group-remove-scene"
+      },
+      {
+        "title": {
           "en": "Set group max level",
           "ko": "그룹 최대 밝기 설정"
         },
@@ -1082,6 +1148,170 @@
           }
         ],
         "id": "group-set-max-level-percent"
+      },
+      {
+        "title": {
+          "en": "Store group scene",
+          "ko": "그룹 씬 저장"
+        },
+        "titleFormatted": {
+          "en": "Store scene [[scene]] for group [[group]] with level [[level]] on bus [[bus]]",
+          "ko": "버스 [[bus]]의 그룹 [[group]]에 씬 [[scene]]을 레벨 [[level]]로 저장"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Bus (0-3)",
+              "ko": "버스 (0-3)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "group",
+            "title": {
+              "en": "Group",
+              "ko": "그룹"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Group (0-15)",
+              "ko": "그룹 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "ko": "밝기"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Level (0-254)",
+              "ko": "밝기 (0-254)"
+            }
+          }
+        ],
+        "id": "group-store-scene"
+      },
+      {
+        "title": {
+          "en": "Store group scene (percent)",
+          "ko": "그룹 씬 저장 (%)"
+        },
+        "titleFormatted": {
+          "en": "Store scene [[scene]] for group [[group]] with [[percent]]% on bus [[bus]]",
+          "ko": "버스 [[bus]]의 그룹 [[group]]에 씬 [[scene]]을 [[percent]]%로 저장"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Bus (0-3)",
+              "ko": "버스 (0-3)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "group",
+            "title": {
+              "en": "Group",
+              "ko": "그룹"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Group (0-15)",
+              "ko": "그룹 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "percent",
+            "title": {
+              "en": "Percent",
+              "ko": "밝기 (%)"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Percent (0-100)",
+              "ko": "퍼센트 (0-100)"
+            }
+          }
+        ],
+        "id": "group-store-scene-percent"
       },
       {
         "title": {
@@ -1459,6 +1689,72 @@
       },
       {
         "title": {
+          "en": "Remove light scene",
+          "ko": "조명 씬 삭제"
+        },
+        "titleFormatted": {
+          "en": "Remove scene [[scene]] from light [[address]] on bus [[bus]]",
+          "ko": "버스 [[bus]]의 조명 [[address]]에서 씬 [[scene]] 삭제"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Bus (0-3)",
+              "ko": "버스 (0-3)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "address",
+            "title": {
+              "en": "Address",
+              "ko": "주소"
+            },
+            "min": 0,
+            "max": 63,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Address (0-63)",
+              "ko": "주소 (0-63)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          }
+        ],
+        "id": "light-remove-scene"
+      },
+      {
+        "title": {
           "en": "Set light max level",
           "ko": "조명 최대 밝기 설정"
         },
@@ -1588,6 +1884,170 @@
           }
         ],
         "id": "light-set-max-level-percent"
+      },
+      {
+        "title": {
+          "en": "Store light scene",
+          "ko": "조명 씬 저장"
+        },
+        "titleFormatted": {
+          "en": "Store scene [[scene]] for light [[address]] with level [[level]] on bus [[bus]]",
+          "ko": "버스 [[bus]]의 조명 [[address]]에 씬 [[scene]]을 레벨 [[level]]로 저장"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Bus (0-3)",
+              "ko": "버스 (0-3)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "address",
+            "title": {
+              "en": "Address",
+              "ko": "주소"
+            },
+            "min": 0,
+            "max": 63,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Address (0-63)",
+              "ko": "주소 (0-63)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "Level",
+              "ko": "밝기"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Level (0-254)",
+              "ko": "밝기 (0-254)"
+            }
+          }
+        ],
+        "id": "light-store-scene"
+      },
+      {
+        "title": {
+          "en": "Store light scene (percent)",
+          "ko": "조명 씬 저장 (%)"
+        },
+        "titleFormatted": {
+          "en": "Store scene [[scene]] for light [[address]] with [[percent]]% on bus [[bus]]",
+          "ko": "버스 [[bus]]의 조명 [[address]]에 씬 [[scene]]을 [[percent]]%로 저장"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Bus (0-3)",
+              "ko": "버스 (0-3)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "address",
+            "title": {
+              "en": "Address",
+              "ko": "주소"
+            },
+            "min": 0,
+            "max": 63,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Address (0-63)",
+              "ko": "주소 (0-63)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "scene",
+            "title": {
+              "en": "Scene",
+              "ko": "씬"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Scene (0-15)",
+              "ko": "씬 (0-15)"
+            }
+          },
+          {
+            "type": "range",
+            "name": "percent",
+            "title": {
+              "en": "Percent",
+              "ko": "밝기 (%)"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Percent (0-100)",
+              "ko": "퍼센트 (0-100)"
+            }
+          }
+        ],
+        "id": "light-store-scene-percent"
       },
       {
         "title": {

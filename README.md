@@ -6,7 +6,9 @@
 
 Bring professional DALI lighting control to your smart home!
 
-DALIHub connects your DALI lighting system to Homey, giving you full control over your commercial-grade lighting through an intuitive smart home interface.
+[DALIHub](https://www.niot.me/dalihub) connects your DALI lighting system to Homey, giving you full control over your commercial-grade lighting through an intuitive smart home interface.
+
+**What is DALIHub?** DALIHub is a comprehensive solution that combines server software and Raspberry Pi hardware to bridge DALI lighting systems with smart home platforms. Learn more at [www.niot.me/dalihub](https://www.niot.me/dalihub).
 
 ## Features
 
@@ -34,11 +36,13 @@ DALIHub connects your DALI lighting system to Homey, giving you full control ove
 
 ## Requirements
 
-This app requires:
+This app requires **[DALIHub](https://www.niot.me/dalihub)** - a complete DALI bridge solution that includes:
 
-1. **DALIHub Software** - Server software for DALI communication
-2. **ATX LED DALI HAT** - Raspberry Pi DALI interface hardware
-   - Purchase: [ATX LED DALI HAT](https://atx-led.com/products/atx-led%C2%AE-raspberry-pi-to-dali-co-processor?_pos=1&_sid=85d971d63&_ss=r&variant=50911029461276)
+- **DALIHub Server Software** - Handles DALI communication and provides the API interface
+- **ATX LED DALI HAT** - Raspberry Pi hardware for DALI bus communication
+  - Purchase: [ATX LED DALI HAT](https://atx-led.com/products/atx-led%C2%AE-raspberry-pi-to-dali-co-processor?_pos=1&_sid=85d971d63&_ss=r&variant=50911029461276)
+
+For setup instructions and documentation, visit [www.niot.me/dalihub](https://www.niot.me/dalihub).
 
 ## License
 
