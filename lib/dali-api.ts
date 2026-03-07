@@ -1,9 +1,5 @@
 import http from 'http';
 
-interface HomeyInterface {
-  setTimeout(callback: () => void, ms: number): NodeJS.Timeout;
-}
-
 // DALI Arc Power <-> Percent 변환
 // DALI 표준 로그 커브 기반
 
@@ -42,8 +38,16 @@ export interface DaliGear {
   address: number;
   level: number;
   lastUpdated: string;
-  deviceType: 6 | 7;
+  deviceType?: number;
+  deviceTypes?: number[];
   name: string;
+  // DT8 colour properties
+  colourTypeFeatures?: number;
+  colourStatus?: number;
+  numberOfPrimaries?: number;
+  tcCoolest?: number;
+  tcWarmest?: number;
+  tcCurrent?: number;
 }
 
 export interface DaliGroup {
@@ -99,17 +103,11 @@ export interface DaliEvent {
 export class DaliApiClient {
   private baseUrl: string;
   private log: (...args: unknown[]) => void;
-  private homey: HomeyInterface;
-  private sseRequest: http.ClientRequest | null = null;
-  private eventHandlers: Map<string, Set<(event: DaliEvent) => void>> = new Map();
-  private reconnectTimeout: NodeJS.Timeout | null = null;
-  private shouldReconnect: boolean = true;
 
-  constructor(host: string, homey: HomeyInterface, logger: (...args: unknown[]) => void) {
+  constructor(host: string, logger: (...args: unknown[]) => void) {
     // If host doesn't include port, add default port 3000
     const hostWithPort = host.includes(':') ? host : `${host}:3000`;
     this.baseUrl = `http://${hostWithPort}`;
-    this.homey = homey;
     this.log = logger;
   }
 
@@ -354,6 +352,135 @@ export class DaliApiClient {
     });
   }
 
+  // DT8 Colour Query Methods
+
+  async getNumberOfPrimaries(busId: number, address: number): Promise<number> {
+    this.log(`Get Number of Primaries - Bus ${busId}, Address ${address}`);
+    const result = await this.makeGetRequest<{ numberOfPrimaries: number }>(`/dali/lights/${address}/primaries?bus=${busId}`);
+    return result.numberOfPrimaries;
+  }
+
+  async getPrimaryLevels(busId: number, address: number): Promise<number[]> {
+    this.log(`Get Primary Levels - Bus ${busId}, Address ${address}`);
+    const result = await this.makeGetRequest<{ levels: number[] }>(`/dali/lights/${address}/primary-levels?bus=${busId}`);
+    return result.levels;
+  }
+
+  // DT8 Colour Control Methods
+
+  async setColourTemperatureMirek(busId: number, address: number, mirek: number): Promise<void> {
+    this.log(`Set Colour Temperature - Bus ${busId}, Address ${address}, Mirek ${mirek}`);
+    return this.makePostRequest(`/dali/lights/${address}/colour-temperature-mirek`, {
+      bus: busId,
+      mirek,
+    });
+  }
+
+  async setColourTemperatureKelvin(busId: number, address: number, kelvin: number): Promise<void> {
+    this.log(`Set Colour Temperature - Bus ${busId}, Address ${address}, Kelvin ${kelvin}`);
+    return this.makePostRequest(`/dali/lights/${address}/colour-temperature`, {
+      bus: busId,
+      kelvin,
+    });
+  }
+
+  async setRGB(busId: number, address: number, r: number, g: number, b: number): Promise<void> {
+    this.log(`Set RGB - Bus ${busId}, Address ${address}, R ${r}, G ${g}, B ${b}`);
+    return this.makePostRequest(`/dali/lights/${address}/rgb`, {
+      bus: busId,
+      r,
+      g,
+      b,
+    });
+  }
+
+  async setRGBW(busId: number, address: number, r: number, g: number, b: number, w: number): Promise<void> {
+    this.log(`Set RGBW - Bus ${busId}, Address ${address}, R ${r}, G ${g}, B ${b}, W ${w}`);
+    return this.makePostRequest(`/dali/lights/${address}/rgbw`, {
+      bus: busId,
+      r,
+      g,
+      b,
+      w,
+    });
+  }
+
+  async setRGBWW(busId: number, address: number, r: number, g: number, b: number, ww: number, cw: number): Promise<void> {
+    this.log(`Set RGBWW - Bus ${busId}, Address ${address}, R ${r}, G ${g}, B ${b}, WW ${ww}, CW ${cw}`);
+    return this.makePostRequest(`/dali/lights/${address}/rgbww`, {
+      bus: busId,
+      r,
+      g,
+      b,
+      ww,
+      cw,
+    });
+  }
+
+  async setPrimaryLevel(busId: number, address: number, channel: number, level: number): Promise<void> {
+    this.log(`Set Primary Level - Bus ${busId}, Address ${address}, Channel ${channel}, Level ${level}`);
+    return this.makePostRequest(`/dali/lights/${address}/primary/${channel}`, {
+      bus: busId,
+      level,
+    });
+  }
+
+  // Fade Time Methods
+
+  async setLightFadeTime(busId: number, address: number, fadeTime: number): Promise<void> {
+    this.log(`Set Light Fade Time - Bus ${busId}, Address ${address}, Fade Time ${fadeTime}`);
+    return this.makePostRequest(`/dali/lights/${address}/set-fade-time`, {
+      bus: busId,
+      fadeTime,
+    });
+  }
+
+  async setGroupFadeTime(busId: number, groupId: number, fadeTime: number): Promise<void> {
+    this.log(`Set Group Fade Time - Bus ${busId}, Group ${groupId}, Fade Time ${fadeTime}`);
+    return this.makePostRequest(`/dali/groups/${groupId}/set-fade-time`, {
+      bus: busId,
+      fadeTime,
+    });
+  }
+
+  async setAllFadeTime(busId: number, fadeTime: number): Promise<void> {
+    this.log(`Set All Fade Time - Bus ${busId}, Fade Time ${fadeTime}`);
+    return this.makePostRequest(`/dali/all/set-fade-time`, {
+      bus: busId,
+      fadeTime,
+    });
+  }
+
+  private makeGetRequest<T>(path: string): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const url = `${this.baseUrl}${path}`;
+      this.log(`GET ${url}`);
+
+      http.get(url, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+            try {
+              const result = JSON.parse(data) as T;
+              resolve(result);
+            } catch (error) {
+              reject(new Error(`Failed to parse response: ${data}`));
+            }
+          } else {
+            reject(new Error(`Request failed with status ${res.statusCode}: ${data}`));
+          }
+        });
+      }).on('error', (error) => {
+        reject(error);
+      });
+    });
+  }
+
   private makePostRequest(path: string, body: Record<string, unknown>): Promise<void> {
     return new Promise((resolve, reject) => {
       const url = new URL(path, this.baseUrl);
@@ -397,144 +524,4 @@ export class DaliApiClient {
     });
   }
 
-  connectToEventStream(): void {
-    if (this.sseRequest) {
-      this.log('SSE already connected');
-      return;
-    }
-
-    // Enable reconnection for this connection
-    this.shouldReconnect = true;
-
-    const url = new URL('/events/state', this.baseUrl);
-    this.log('Connecting to SSE:', url.href);
-
-    const options = {
-      hostname: url.hostname,
-      port: url.port || 80,
-      path: url.pathname,
-      method: 'GET',
-      headers: {
-        Accept: 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-      },
-    };
-
-    this.sseRequest = http.request(options, (res) => {
-      this.log('SSE connected with status:', res.statusCode);
-
-      let buffer = '';
-
-      res.on('data', (chunk) => {
-        buffer += chunk.toString();
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.substring(6);
-            try {
-              const event = JSON.parse(data) as DaliEvent;
-              this.emitEvent(event);
-            } catch (error) {
-              this.log('Error parsing SSE event:', error);
-            }
-          }
-        }
-      });
-
-      res.on('end', () => {
-        this.log('SSE connection ended');
-        this.sseRequest = null;
-        if (this.shouldReconnect) {
-          this.reconnectTimeout = this.homey.setTimeout(() => this.reconnect(), 5000);
-        }
-      });
-
-      res.on('error', (error) => {
-        this.log('SSE response error:', error);
-        this.sseRequest = null;
-        if (this.shouldReconnect) {
-          this.reconnectTimeout = this.homey.setTimeout(() => this.reconnect(), 5000);
-        }
-      });
-    });
-
-    this.sseRequest.on('error', (error) => {
-      this.log('SSE request error:', error);
-      this.sseRequest = null;
-      if (this.shouldReconnect) {
-        this.reconnectTimeout = this.homey.setTimeout(() => this.reconnect(), 5000);
-      }
-    });
-
-    this.sseRequest.end();
-  }
-
-  private reconnect(): void {
-    this.log('Reconnecting to SSE...');
-    this.connectToEventStream();
-  }
-
-  disconnectFromEventStream(): void {
-    // Prevent any reconnection attempts
-    this.shouldReconnect = false;
-
-    // Clear any pending reconnect timeout
-    if (this.reconnectTimeout) {
-      clearTimeout(this.reconnectTimeout);
-      this.reconnectTimeout = null;
-    }
-
-    // Destroy the SSE connection
-    if (this.sseRequest) {
-      this.sseRequest.destroy();
-      this.sseRequest = null;
-      this.log('SSE disconnected');
-    }
-  }
-
-  on(eventType: string, handler: (event: DaliEvent) => void): void {
-    if (!this.eventHandlers.has(eventType)) {
-      this.eventHandlers.set(eventType, new Set());
-    }
-    this.eventHandlers.get(eventType)!.add(handler);
-  }
-
-  off(eventType: string, handler: (event: DaliEvent) => void): void {
-    const handlers = this.eventHandlers.get(eventType);
-    if (handlers) {
-      handlers.delete(handler);
-    }
-  }
-
-  private emitEvent(event: DaliEvent): void {
-    // Skip logging for sensor events to reduce noise (only show light-related events)
-    if (event.type !== 'control-device.lux' && event.type !== 'control-device.changed') {
-      this.log('SSE event received:', event.type, event);
-    }
-
-    const handlers = this.eventHandlers.get(event.type);
-    if (handlers) {
-      handlers.forEach((handler) => {
-        try {
-          handler(event);
-        } catch (error) {
-          this.log('Error in event handler:', error);
-        }
-      });
-    }
-
-    const allHandlers = this.eventHandlers.get('*');
-    if (allHandlers) {
-      allHandlers.forEach((handler) => {
-        try {
-          handler(event);
-        } catch (error) {
-          this.log('Error in wildcard event handler:', error);
-        }
-      });
-    }
-  }
 }

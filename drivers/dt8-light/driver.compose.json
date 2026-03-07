@@ -1,0 +1,44 @@
+{
+  "id": "dt8-light",
+  "name": {
+    "en": "DALI DT8 Colour Light",
+    "ko": "DALI DT8 컬러 조명"
+  },
+  "class": "light",
+  "capabilities": [
+    "onoff",
+    "dim",
+    "dali_level",
+    "light_temperature"
+  ],
+  "capabilitiesOptions": {
+    "light_temperature": {
+      "min": 0,
+      "max": 1
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "/drivers/dt8-light/assets/images/small.png",
+    "large": "/drivers/dt8-light/assets/images/large.png",
+    "xlarge": "/drivers/dt8-light/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

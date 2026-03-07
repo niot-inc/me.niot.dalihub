@@ -12,12 +12,47 @@
   </header>
 
   <fieldset class="homey-form-fieldset">
-    <legend class="homey-form-legend">DALI Hub Server Details</legend>
+    <legend class="homey-form-legend">DALI Hub Server</legend>
 
     <div class="homey-form-group">
       <label class="homey-form-label" for="server_url">Server Address (IP:Port)</label>
       <input class="homey-form-input" id="server_url" type="text" value="" placeholder="192.168.1.53:3000" />
-      <p class="homey-form-description">Enter the IP address and port of your DALI Hub server. Port defaults to 3000 if not specified (e.g., 192.168.1.53:3000 or 192.168.1.53)</p>
+      <p class="homey-form-description">Enter the IP address and port of your DALI Hub server. Port defaults to 3000 if not specified.</p>
+    </div>
+  </fieldset>
+
+  <!--
+    MQTT Settings
+    - DALIHub server runs on Raspberry Pi with Mosquitto MQTT broker
+    - Default MQTT port: 1883
+    - Default credentials: dalihub / dalihub
+    - Topic prefix must match the server's mqtt.topicPrefix setting (default: "dalihub")
+  -->
+  <fieldset class="homey-form-fieldset">
+    <legend class="homey-form-legend">MQTT Settings</legend>
+
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="mqtt_broker_url">Broker URL</label>
+      <input class="homey-form-input" id="mqtt_broker_url" type="text" value="" placeholder="mqtt://192.168.1.53:1883" />
+      <p class="homey-form-description">MQTT broker URL. Typically mqtt://&lt;server-ip&gt;:1883 (Mosquitto runs on the same Raspberry Pi as DALIHub)</p>
+    </div>
+
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="mqtt_topic_prefix">Topic Prefix</label>
+      <input class="homey-form-input" id="mqtt_topic_prefix" type="text" value="dalihub" placeholder="dalihub" />
+      <p class="homey-form-description">MQTT topic prefix. Must match the prefix configured in your DALI Hub server (default: dalihub)</p>
+    </div>
+
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="mqtt_username">Username</label>
+      <input class="homey-form-input" id="mqtt_username" type="text" value="dalihub" placeholder="dalihub" />
+      <p class="homey-form-description">MQTT username (default: dalihub)</p>
+    </div>
+
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="mqtt_password">Password</label>
+      <input class="homey-form-input" id="mqtt_password" type="text" value="dalihub" placeholder="dalihub" />
+      <p class="homey-form-description">MQTT password (default: dalihub)</p>
     </div>
   </fieldset>
 
@@ -28,27 +63,91 @@
       Homey.ready();
 
       var serverUrlElement = document.getElementById("server_url");
+      var mqttBrokerUrlElement = document.getElementById("mqtt_broker_url");
+      var mqttTopicPrefixElement = document.getElementById("mqtt_topic_prefix");
+      var mqttUsernameElement = document.getElementById("mqtt_username");
+      var mqttPasswordElement = document.getElementById("mqtt_password");
       var saveElement = document.getElementById("save");
 
-      // Load current server_url setting
-      Homey.get("server_url", function (err, server) {
-        if (err) return Homey.alert(err);
-        if (server) {
-          serverUrlElement.value = server;
+      // Load current settings
+      Homey.get("server_url", function (err, value) {
+        if (!err && value) serverUrlElement.value = value;
+      });
+
+      Homey.get("mqtt_broker_url", function (err, value) {
+        if (!err && value) mqttBrokerUrlElement.value = value;
+      });
+
+      Homey.get("mqtt_topic_prefix", function (err, value) {
+        if (!err && value) {
+          mqttTopicPrefixElement.value = value;
         }
+        // Default is already set in HTML value attribute
+      });
+
+      Homey.get("mqtt_username", function (err, value) {
+        if (!err && value) {
+          mqttUsernameElement.value = value;
+        }
+        // Default is already set in HTML value attribute
+      });
+
+      Homey.get("mqtt_password", function (err, value) {
+        if (!err && value) {
+          mqttPasswordElement.value = value;
+        }
+        // Default is already set in HTML value attribute
       });
 
       // Save button click handler
       saveElement.addEventListener("click", function (e) {
         var serverUrl = serverUrlElement.value.trim();
+        var mqttBrokerUrl = mqttBrokerUrlElement.value.trim();
+        var mqttTopicPrefix = mqttTopicPrefixElement.value.trim() || "dalihub";
+        var mqttUsername = mqttUsernameElement.value.trim() || "dalihub";
+        var mqttPassword = mqttPasswordElement.value || "dalihub";
 
         if (!serverUrl) {
           return Homey.alert("Please enter a server address");
         }
 
+        // Save all settings
+        var saveCount = 0;
+        var totalSaves = 5;
+        var hasError = false;
+
+        function checkComplete() {
+          saveCount++;
+          if (saveCount >= totalSaves) {
+            if (!hasError) {
+              Homey.alert("Settings saved successfully!");
+            }
+          }
+        }
+
         Homey.set("server_url", serverUrl, function (err) {
-          if (err) return Homey.alert(err);
-          Homey.alert("Settings saved successfully!");
+          if (err) { hasError = true; Homey.alert("Error saving server URL: " + err); }
+          checkComplete();
+        });
+
+        Homey.set("mqtt_broker_url", mqttBrokerUrl, function (err) {
+          if (err) { hasError = true; Homey.alert("Error saving MQTT broker URL: " + err); }
+          checkComplete();
+        });
+
+        Homey.set("mqtt_topic_prefix", mqttTopicPrefix, function (err) {
+          if (err) { hasError = true; Homey.alert("Error saving MQTT topic prefix: " + err); }
+          checkComplete();
+        });
+
+        Homey.set("mqtt_username", mqttUsername, function (err) {
+          if (err) { hasError = true; Homey.alert("Error saving MQTT username: " + err); }
+          checkComplete();
+        });
+
+        Homey.set("mqtt_password", mqttPassword, function (err) {
+          if (err) { hasError = true; Homey.alert("Error saving MQTT password: " + err); }
+          checkComplete();
         });
       });
     }

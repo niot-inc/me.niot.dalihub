@@ -91,6 +91,25 @@ class DaliControllerDriver extends Homey.Driver {
       .registerRunListener(async (args) => {
         return args.device.removeGroupScene(args.bus, args.group, args.scene);
       });
+
+    // Register fade time action cards
+    this.homey.flow.getActionCard('set-light-fade-time')
+      .registerRunListener(async (args) => {
+        const fadeTime = parseInt(args.fadeTime, 10);
+        return args.device.setLightFadeTime(args.bus, args.address, fadeTime);
+      });
+
+    this.homey.flow.getActionCard('set-group-fade-time')
+      .registerRunListener(async (args) => {
+        const fadeTime = parseInt(args.fadeTime, 10);
+        return args.device.setGroupFadeTime(args.bus, args.group, fadeTime);
+      });
+
+    this.homey.flow.getActionCard('set-all-fade-time')
+      .registerRunListener(async (args) => {
+        const fadeTime = parseInt(args.fadeTime, 10);
+        return args.device.setAllFadeTime(args.bus, fadeTime);
+      });
   }
 
   async onPairListDevices() {

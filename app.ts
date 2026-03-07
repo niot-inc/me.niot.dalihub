@@ -2,6 +2,7 @@
 
 import Homey from 'homey';
 import { DaliApiClient, DaliState, DaliEvent } from './lib/dali-api';
+import { DaliMqttClient, MqttConfig } from './lib/mqtt-client';
 
 interface DaliDevice extends Homey.Device {
   getData(): { busId: number; address?: number; groupId?: number; instanceIndex?: number };
@@ -13,6 +14,7 @@ interface DaliDevice extends Homey.Device {
 
 class DaliHubApp extends Homey.App {
   private daliClient!: DaliApiClient;
+  private mqttClient: DaliMqttClient | null = null;
   private daliState: Map<number, DaliState> = new Map();
   private readonly BUS_IDS = [0, 1, 2, 3];
 
@@ -42,24 +44,27 @@ class DaliHubApp extends Homey.App {
 
   async onUninit() {
     this.log('DALIHub app is shutting down');
-    if (this.daliClient) {
-      this.daliClient.disconnectFromEventStream();
+    if (this.mqttClient) {
+      this.mqttClient.disconnect();
     }
   }
 
   async onSettingsChanged(key: string) {
     this.log(`Settings have been changed: ${key}`);
 
-    // Only reconnect if server_url changed
-    if (key === 'server_url') {
+    // Check if any connection-related settings changed
+    const connectionSettings = ['server_url', 'mqtt_broker_url', 'mqtt_topic_prefix', 'mqtt_username', 'mqtt_password'];
+
+    if (connectionSettings.includes(key)) {
       const serverUrl = this.homey.settings.get('server_url');
 
       if (serverUrl) {
-        this.log(`Reconnecting to new server: ${serverUrl}`);
+        this.log(`Reconnecting with updated settings...`);
 
-        // Disconnect existing connection
-        if (this.daliClient) {
-          this.daliClient.disconnectFromEventStream();
+        // Disconnect existing MQTT connection
+        if (this.mqttClient) {
+          this.mqttClient.disconnect();
+          this.mqttClient = null;
         }
 
         // Clear existing state
@@ -69,8 +74,9 @@ class DaliHubApp extends Homey.App {
         await this.initializeConnection(serverUrl);
       } else {
         this.log('Server URL removed, disconnecting...');
-        if (this.daliClient) {
-          this.daliClient.disconnectFromEventStream();
+        if (this.mqttClient) {
+          this.mqttClient.disconnect();
+          this.mqttClient = null;
         }
       }
     }
@@ -78,13 +84,30 @@ class DaliHubApp extends Homey.App {
 
   private async initializeConnection(serverUrl: string): Promise<void> {
     try {
-      this.daliClient = new DaliApiClient(serverUrl, this.homey, this.log.bind(this));
+      this.daliClient = new DaliApiClient(serverUrl, this.log.bind(this));
 
       await this.loadInitialState();
 
-      this.setupEventHandlers();
+      // Setup MQTT connection for real-time events
+      // DALIHub server runs on Raspberry Pi with Mosquitto MQTT broker
+      // Default: mqtt://<server-ip>:1883, credentials: dalihub/dalihub
+      const mqttBrokerUrl = this.homey.settings.get('mqtt_broker_url');
 
-      this.daliClient.connectToEventStream();
+      if (mqttBrokerUrl) {
+        const mqttConfig: MqttConfig = {
+          brokerUrl: mqttBrokerUrl,
+          topicPrefix: this.homey.settings.get('mqtt_topic_prefix') || 'dalihub',
+          username: this.homey.settings.get('mqtt_username') || 'dalihub',
+          password: this.homey.settings.get('mqtt_password') || 'dalihub',
+        };
+
+        this.mqttClient = new DaliMqttClient(mqttConfig, this.homey, this.log.bind(this));
+        this.setupMqttEventHandlers();
+        this.mqttClient.connect();
+      } else {
+        this.log('No MQTT broker URL configured. Real-time events will not be available.');
+        this.log('Configure MQTT in app settings: mqtt://<server-ip>:1883');
+      }
     } catch (error) {
       this.error('Failed to initialize connection:', error);
     }
@@ -104,21 +127,33 @@ class DaliHubApp extends Homey.App {
     }
   }
 
-  private setupEventHandlers(): void {
-    this.daliClient.on('gear.changed', (event) => {
+  private setupMqttEventHandlers(): void {
+    if (!this.mqttClient) return;
+
+    this.mqttClient.on('gear.changed', (event) => {
       this.handleGearChanged(event);
     });
 
-    this.daliClient.on('group.changed', (event) => {
+    this.mqttClient.on('group.changed', (event) => {
       this.handleGroupChanged(event);
     });
 
-    this.daliClient.on('control-device.changed', (event) => {
+    this.mqttClient.on('control-device.changed', (event) => {
       this.handleControlDeviceChanged(event);
     });
 
-    this.daliClient.on('control-device.lux', (event) => {
+    this.mqttClient.on('control-device.lux', (event) => {
       this.handleControlDeviceLux(event);
+    });
+
+    this.mqttClient.onStatus((online) => {
+      this.log(`Server status changed: ${online ? 'online' : 'offline'}`);
+      if (online) {
+        // Reload state when server comes back online
+        this.loadInitialState().catch((error) => {
+          this.error('Failed to reload state after server came online:', error);
+        });
+      }
     });
   }
 
@@ -128,7 +163,7 @@ class DaliHubApp extends Homey.App {
     const { level } = event;
     const { address } = event;
 
-    this.log(`⚡ Gear Changed - Bus ${event.busId}, Address ${address}, Level ${level}`);
+    this.log(`Gear Changed - Bus ${event.busId}, Address ${address}, Level ${level}`);
 
     const state = this.daliState.get(event.busId);
     if (state) {
@@ -140,7 +175,7 @@ class DaliHubApp extends Homey.App {
     }
 
     const drivers = this.homey.drivers.getDrivers();
-    ['dimmable-light', 'bistable-light'].forEach((driverName) => {
+    ['dimmable-light', 'bistable-light', 'dt8-light'].forEach((driverName) => {
       const driver = drivers[driverName];
       if (driver) {
         const devices = driver.getDevices() as DaliDevice[];
@@ -164,7 +199,7 @@ class DaliHubApp extends Homey.App {
     const { level } = event;
     const { groupId } = event;
 
-    this.log(`⚡ Group Changed - Bus ${event.busId}, Group ${groupId}, Level ${level}`);
+    this.log(`Group Changed - Bus ${event.busId}, Group ${groupId}, Level ${level}`);
 
     const state = this.daliState.get(event.busId);
     if (state) {
@@ -180,7 +215,7 @@ class DaliHubApp extends Homey.App {
       devices.forEach((device) => {
         const deviceData = device.getData();
         if (deviceData.busId === event.busId && deviceData.groupId === groupId) {
-          this.log(`  → Updating device: ${device.getName()}`);
+          this.log(`  -> Updating device: ${device.getName()}`);
           device.updateLevelFromEvent(level).catch((err: Error) => {
             this.error('Failed to update group level:', err);
           });
@@ -190,10 +225,7 @@ class DaliHubApp extends Homey.App {
   }
 
   private handleControlDeviceChanged(event: DaliEvent): void {
-    // this.log('Control device changed event:', JSON.stringify(event));
-
     if (event.address === undefined || event.instanceIndex === undefined || event.eventCode === undefined) {
-      // this.log('Event missing required fields - address:', event.address, 'instanceIndex:', event.instanceIndex, 'eventCode:', event.eventCode);
       return;
     }
 
@@ -223,26 +255,20 @@ class DaliHubApp extends Homey.App {
             });
           }
         } else if (instance && instance.type === 1) {
-          // this.log('Button instance found - type:', instance.type, 'name:', instance.name);
           const drivers = this.homey.drivers.getDrivers();
           const driver = drivers['push-button'];
           if (driver) {
             const devices = driver.getDevices() as DaliDevice[];
-            // this.log('Found', devices.length, 'push-button devices');
             devices.forEach((device) => {
               const deviceData = device.getData();
-              // this.log('Checking device:', deviceData.busId, deviceData.address, deviceData.instanceIndex, 'vs event:', event.busId, address, instanceIndex);
               if (deviceData.busId === event.busId
                   && deviceData.address === address
                   && deviceData.instanceIndex === instanceIndex) {
-                // this.log('Matched! Calling handleButtonEvent with eventCode:', eventCode);
                 device.handleButtonEvent?.(eventCode).catch((err: Error) => {
                   this.error('Failed to handle button event:', err);
                 });
               }
             });
-          } else {
-            // this.log('push-button driver not found!');
           }
         }
       }

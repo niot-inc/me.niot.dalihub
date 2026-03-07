@@ -84,6 +84,24 @@ class DaliControllerDevice extends Homey.Device {
     await client.removeGroupScene(busId, groupId, scene);
   }
 
+  async setLightFadeTime(busId: number, address: number, fadeTime: number): Promise<void> {
+    this.log(`Setting fade time for light ${address} on bus ${busId} to ${fadeTime}`);
+    const client = this.getDaliClient();
+    await client.setLightFadeTime(busId, address, fadeTime);
+  }
+
+  async setGroupFadeTime(busId: number, groupId: number, fadeTime: number): Promise<void> {
+    this.log(`Setting fade time for group ${groupId} on bus ${busId} to ${fadeTime}`);
+    const client = this.getDaliClient();
+    await client.setGroupFadeTime(busId, groupId, fadeTime);
+  }
+
+  async setAllFadeTime(busId: number, fadeTime: number): Promise<void> {
+    this.log(`Setting fade time for all lights on bus ${busId} to ${fadeTime}`);
+    const client = this.getDaliClient();
+    await client.setAllFadeTime(busId, fadeTime);
+  }
+
   async onDeleted() {
     this.log('DaliControllerDevice has been deleted');
   }

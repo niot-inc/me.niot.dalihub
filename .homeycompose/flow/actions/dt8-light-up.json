@@ -1,0 +1,13 @@
+{
+  "title": {
+    "en": "Increase brightness (DT8)",
+    "ko": "밝기 올리기 (DT8)"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dt8-light"
+    }
+  ]
+}

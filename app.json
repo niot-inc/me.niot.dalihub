@@ -82,6 +82,31 @@
       },
       {
         "title": {
+          "en": "DALI level changed (DT8)",
+          "ko": "DALI 레벨이 변경됨 (DT8)"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "level",
+            "type": "number",
+            "title": {
+              "en": "Level",
+              "ko": "레벨"
+            },
+            "example": 127
+          }
+        ],
+        "id": "dt8-light-level-changed"
+      },
+      {
+        "title": {
           "en": "DALI level changed",
           "ko": "DALI 레벨이 변경됨"
         },
@@ -323,6 +348,74 @@
           }
         ],
         "id": "dimmable-light-level-less"
+      },
+      {
+        "title": {
+          "en": "Brightness is greater than (DT8)",
+          "ko": "밝기가 더 크면 (DT8)"
+        },
+        "titleFormatted": {
+          "en": "Brightness is greater than [[brightness]]%",
+          "ko": "밝기가 [[brightness]]%보다 크면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          },
+          {
+            "type": "range",
+            "name": "brightness",
+            "title": {
+              "en": "Brightness %",
+              "ko": "밝기 %"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "placeholder": {
+              "en": "Brightness %",
+              "ko": "밝기 %"
+            }
+          }
+        ],
+        "id": "dt8-light-brightness-greater"
+      },
+      {
+        "title": {
+          "en": "Brightness is less than (DT8)",
+          "ko": "밝기가 더 작으면 (DT8)"
+        },
+        "titleFormatted": {
+          "en": "Brightness is less than [[brightness]]%",
+          "ko": "밝기가 [[brightness]]%보다 작으면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          },
+          {
+            "type": "range",
+            "name": "brightness",
+            "title": {
+              "en": "Brightness %",
+              "ko": "밝기 %"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "label": "%",
+            "placeholder": {
+              "en": "Brightness %",
+              "ko": "밝기 %"
+            }
+          }
+        ],
+        "id": "dt8-light-brightness-less"
       },
       {
         "title": {
@@ -950,6 +1043,258 @@
           }
         ],
         "id": "dimmable-light-up"
+      },
+      {
+        "title": {
+          "en": "Decrease brightness (DT8)",
+          "ko": "밝기 내리기 (DT8)"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          }
+        ],
+        "id": "dt8-light-down"
+      },
+      {
+        "title": {
+          "en": "Set colour temperature (DT8)",
+          "ko": "색온도 설정 (DT8)"
+        },
+        "titleFormatted": {
+          "en": "Set colour temperature to [[temperature]]",
+          "ko": "색온도를 [[temperature]]로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          },
+          {
+            "type": "range",
+            "name": "temperature",
+            "title": {
+              "en": "Colour Temperature",
+              "ko": "색온도"
+            },
+            "min": 0,
+            "max": 1,
+            "step": 0.01,
+            "labelDecimals": 2,
+            "label": {
+              "en": "Warm (0) - Cool (1)",
+              "ko": "웜 (0) - 쿨 (1)"
+            }
+          }
+        ],
+        "id": "dt8-light-set-colour-temperature"
+      },
+      {
+        "title": {
+          "en": "Set DALI level (DT8)",
+          "ko": "DALI 레벨 설정 (DT8)"
+        },
+        "titleFormatted": {
+          "en": "Set DALI level to [[level]]",
+          "ko": "DALI 레벨을 [[level]]로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level (0-254)",
+              "ko": "DALI 레벨 (0-254)"
+            }
+          }
+        ],
+        "id": "dt8-light-set-level"
+      },
+      {
+        "title": {
+          "en": "Set DALI level with fade time (DT8)",
+          "ko": "페이드 시간과 함께 DALI 레벨 설정 (DT8)"
+        },
+        "titleFormatted": {
+          "en": "Set DALI level to [[level]] with fade time [[fadeTime]]",
+          "ko": "DALI 레벨을 [[level]]로 페이드 시간 [[fadeTime]]과 함께 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          },
+          {
+            "type": "range",
+            "name": "level",
+            "title": {
+              "en": "DALI Level",
+              "ko": "DALI 레벨"
+            },
+            "min": 0,
+            "max": 254,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "DALI Level (0-254)",
+              "ko": "DALI 레벨 (0-254)"
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "fadeTime",
+            "title": {
+              "en": "Fade Time",
+              "ko": "페이드 시간"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Fastest",
+                  "ko": "가장 빠름"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "0.7s",
+                  "ko": "0.7초"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "1.0s",
+                  "ko": "1.0초"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "1.4s",
+                  "ko": "1.4초"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "2.0s",
+                  "ko": "2.0초"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "2.8s",
+                  "ko": "2.8초"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "4.0s",
+                  "ko": "4.0초"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "5.7s",
+                  "ko": "5.7초"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "8.0s",
+                  "ko": "8.0초"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "11.3s",
+                  "ko": "11.3초"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "16.0s",
+                  "ko": "16.0초"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "22.6s",
+                  "ko": "22.6초"
+                }
+              },
+              {
+                "id": "12",
+                "label": {
+                  "en": "32.0s",
+                  "ko": "32.0초"
+                }
+              },
+              {
+                "id": "13",
+                "label": {
+                  "en": "45.3s",
+                  "ko": "45.3초"
+                }
+              },
+              {
+                "id": "14",
+                "label": {
+                  "en": "64.0s",
+                  "ko": "64.0초"
+                }
+              },
+              {
+                "id": "15",
+                "label": {
+                  "en": "90.5s",
+                  "ko": "90.5초"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "dt8-light-set-level-with-fade"
+      },
+      {
+        "title": {
+          "en": "Increase brightness (DT8)",
+          "ko": "밝기 올리기 (DT8)"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dt8-light"
+          }
+        ],
+        "id": "dt8-light-up"
       },
       {
         "title": {
@@ -2778,6 +3123,486 @@
           }
         ],
         "id": "scene-recall-group-with-fade"
+      },
+      {
+        "title": {
+          "en": "Set fade time for all lights (broadcast)",
+          "ko": "모든 조명 페이드 타임 설정 (브로드캐스트)"
+        },
+        "titleFormatted": {
+          "en": "Set fade time to [[fadeTime]] for all lights on bus [[bus]]",
+          "ko": "버스 [[bus]]의 모든 조명 페이드 타임을 [[fadeTime]]으로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0
+          },
+          {
+            "type": "dropdown",
+            "name": "fadeTime",
+            "title": {
+              "en": "Fade Time",
+              "ko": "페이드 타임"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Fastest",
+                  "ko": "가장 빠름"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "0.7s",
+                  "ko": "0.7초"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "1.0s",
+                  "ko": "1.0초"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "1.4s",
+                  "ko": "1.4초"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "2.0s",
+                  "ko": "2.0초"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "2.8s",
+                  "ko": "2.8초"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "4.0s",
+                  "ko": "4.0초"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "5.7s",
+                  "ko": "5.7초"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "8.0s",
+                  "ko": "8.0초"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "11.3s",
+                  "ko": "11.3초"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "16.0s",
+                  "ko": "16.0초"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "22.6s",
+                  "ko": "22.6초"
+                }
+              },
+              {
+                "id": "12",
+                "label": {
+                  "en": "32.0s",
+                  "ko": "32.0초"
+                }
+              },
+              {
+                "id": "13",
+                "label": {
+                  "en": "45.3s",
+                  "ko": "45.3초"
+                }
+              },
+              {
+                "id": "14",
+                "label": {
+                  "en": "64.0s",
+                  "ko": "64.0초"
+                }
+              },
+              {
+                "id": "15",
+                "label": {
+                  "en": "90.5s",
+                  "ko": "90.5초"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set-all-fade-time"
+      },
+      {
+        "title": {
+          "en": "Set fade time for group",
+          "ko": "그룹 페이드 타임 설정"
+        },
+        "titleFormatted": {
+          "en": "Set fade time to [[fadeTime]] for group [[group]] on bus [[bus]]",
+          "ko": "버스 [[bus]]의 그룹 [[group]]의 페이드 타임을 [[fadeTime]]으로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0
+          },
+          {
+            "type": "range",
+            "name": "group",
+            "title": {
+              "en": "Group",
+              "ko": "그룹"
+            },
+            "min": 0,
+            "max": 15,
+            "step": 1,
+            "labelDecimals": 0
+          },
+          {
+            "type": "dropdown",
+            "name": "fadeTime",
+            "title": {
+              "en": "Fade Time",
+              "ko": "페이드 타임"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Fastest",
+                  "ko": "가장 빠름"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "0.7s",
+                  "ko": "0.7초"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "1.0s",
+                  "ko": "1.0초"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "1.4s",
+                  "ko": "1.4초"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "2.0s",
+                  "ko": "2.0초"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "2.8s",
+                  "ko": "2.8초"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "4.0s",
+                  "ko": "4.0초"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "5.7s",
+                  "ko": "5.7초"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "8.0s",
+                  "ko": "8.0초"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "11.3s",
+                  "ko": "11.3초"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "16.0s",
+                  "ko": "16.0초"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "22.6s",
+                  "ko": "22.6초"
+                }
+              },
+              {
+                "id": "12",
+                "label": {
+                  "en": "32.0s",
+                  "ko": "32.0초"
+                }
+              },
+              {
+                "id": "13",
+                "label": {
+                  "en": "45.3s",
+                  "ko": "45.3초"
+                }
+              },
+              {
+                "id": "14",
+                "label": {
+                  "en": "64.0s",
+                  "ko": "64.0초"
+                }
+              },
+              {
+                "id": "15",
+                "label": {
+                  "en": "90.5s",
+                  "ko": "90.5초"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set-group-fade-time"
+      },
+      {
+        "title": {
+          "en": "Set fade time for light",
+          "ko": "조명 페이드 타임 설정"
+        },
+        "titleFormatted": {
+          "en": "Set fade time to [[fadeTime]] for light [[address]] on bus [[bus]]",
+          "ko": "버스 [[bus]]의 조명 [[address]]의 페이드 타임을 [[fadeTime]]으로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dali-controller"
+          },
+          {
+            "type": "range",
+            "name": "bus",
+            "title": {
+              "en": "Bus",
+              "ko": "버스"
+            },
+            "min": 0,
+            "max": 3,
+            "step": 1,
+            "labelDecimals": 0
+          },
+          {
+            "type": "range",
+            "name": "address",
+            "title": {
+              "en": "Address",
+              "ko": "주소"
+            },
+            "min": 0,
+            "max": 63,
+            "step": 1,
+            "labelDecimals": 0
+          },
+          {
+            "type": "dropdown",
+            "name": "fadeTime",
+            "title": {
+              "en": "Fade Time",
+              "ko": "페이드 타임"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Fastest",
+                  "ko": "가장 빠름"
+                }
+              },
+              {
+                "id": "1",
+                "label": {
+                  "en": "0.7s",
+                  "ko": "0.7초"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "1.0s",
+                  "ko": "1.0초"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "1.4s",
+                  "ko": "1.4초"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "2.0s",
+                  "ko": "2.0초"
+                }
+              },
+              {
+                "id": "5",
+                "label": {
+                  "en": "2.8s",
+                  "ko": "2.8초"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "4.0s",
+                  "ko": "4.0초"
+                }
+              },
+              {
+                "id": "7",
+                "label": {
+                  "en": "5.7s",
+                  "ko": "5.7초"
+                }
+              },
+              {
+                "id": "8",
+                "label": {
+                  "en": "8.0s",
+                  "ko": "8.0초"
+                }
+              },
+              {
+                "id": "9",
+                "label": {
+                  "en": "11.3s",
+                  "ko": "11.3초"
+                }
+              },
+              {
+                "id": "10",
+                "label": {
+                  "en": "16.0s",
+                  "ko": "16.0초"
+                }
+              },
+              {
+                "id": "11",
+                "label": {
+                  "en": "22.6s",
+                  "ko": "22.6초"
+                }
+              },
+              {
+                "id": "12",
+                "label": {
+                  "en": "32.0s",
+                  "ko": "32.0초"
+                }
+              },
+              {
+                "id": "13",
+                "label": {
+                  "en": "45.3s",
+                  "ko": "45.3초"
+                }
+              },
+              {
+                "id": "14",
+                "label": {
+                  "en": "64.0s",
+                  "ko": "64.0초"
+                }
+              },
+              {
+                "id": "15",
+                "label": {
+                  "en": "90.5s",
+                  "ko": "90.5초"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set-light-fade-time"
       }
     ]
   },
@@ -2908,6 +3733,50 @@
         "small": "/drivers/dimmable-light/assets/images/small.png",
         "large": "/drivers/dimmable-light/assets/images/large.png",
         "xlarge": "/drivers/dimmable-light/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "dt8-light",
+      "name": {
+        "en": "DALI DT8 Colour Light",
+        "ko": "DALI DT8 컬러 조명"
+      },
+      "class": "light",
+      "capabilities": [
+        "onoff",
+        "dim",
+        "dali_level",
+        "light_temperature"
+      ],
+      "capabilitiesOptions": {
+        "light_temperature": {
+          "min": 0,
+          "max": 1
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/dt8-light/assets/images/small.png",
+        "large": "/drivers/dt8-light/assets/images/large.png",
+        "xlarge": "/drivers/dt8-light/assets/images/xlarge.png"
       },
       "pair": [
         {

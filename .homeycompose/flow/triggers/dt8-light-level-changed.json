@@ -1,0 +1,24 @@
+{
+  "title": {
+    "en": "DALI level changed (DT8)",
+    "ko": "DALI 레벨이 변경됨 (DT8)"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dt8-light"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "level",
+      "type": "number",
+      "title": {
+        "en": "Level",
+        "ko": "레벨"
+      },
+      "example": 127
+    }
+  ]
+}

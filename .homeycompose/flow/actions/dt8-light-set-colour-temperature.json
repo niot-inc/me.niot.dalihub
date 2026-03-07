@@ -1,0 +1,33 @@
+{
+  "title": {
+    "en": "Set colour temperature (DT8)",
+    "ko": "색온도 설정 (DT8)"
+  },
+  "titleFormatted": {
+    "en": "Set colour temperature to [[temperature]]",
+    "ko": "색온도를 [[temperature]]로 설정"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dt8-light"
+    },
+    {
+      "type": "range",
+      "name": "temperature",
+      "title": {
+        "en": "Colour Temperature",
+        "ko": "색온도"
+      },
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "labelDecimals": 2,
+      "label": {
+        "en": "Warm (0) - Cool (1)",
+        "ko": "웜 (0) - 쿨 (1)"
+      }
+    }
+  ]
+}
