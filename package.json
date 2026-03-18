@@ -9,9 +9,9 @@
     "mqtt": "^5.10.0"
   },
   "devDependencies": {
-    "@tsconfig/node16": "^16.1.8",
+    "@tsconfig/node22": "^22.0.5",
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.12",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.5.0",
     "eslint": "^7.32.0",
     "eslint-config-athom": "^3.1.5",
     "typescript": "^5.9.3"

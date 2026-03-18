@@ -80,7 +80,9 @@ class DimmableLightDriver extends Homey.Driver {
     for (let busId = 0; busId < 4; busId++) {
       const state = app.getDaliState(busId);
       if (state) {
-        const dimmableGears = state.gears.filter((gear: DaliGear) => gear.deviceType === 6);
+        const dimmableGears = state.gears.filter((gear: DaliGear) =>
+          gear.deviceTypes?.includes(6) && !gear.deviceTypes?.includes(8),
+        );
         dimmableGears.forEach((gear: DaliGear) => {
           devices.push({
             name: gear.name,
@@ -90,7 +92,7 @@ class DimmableLightDriver extends Homey.Driver {
               address: gear.address,
             },
             store: {
-              deviceType: gear.deviceType,
+              deviceTypes: gear.deviceTypes || [6],
             },
           });
         });

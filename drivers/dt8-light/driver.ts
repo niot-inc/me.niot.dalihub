@@ -72,17 +72,9 @@ class DT8LightDriver extends Homey.Driver {
       const state = app.getDaliState(busId);
       if (state) {
         // Filter gears that have DT8 (device type 8) in deviceTypes array
-        const dt8Gears = state.gears.filter((gear: DaliGear) => {
-          // Check deviceTypes array first (new format)
-          if (gear.deviceTypes && gear.deviceTypes.includes(8)) {
-            return true;
-          }
-          // Fall back to deviceType (legacy format)
-          if (gear.deviceType === 8) {
-            return true;
-          }
-          return false;
-        });
+        const dt8Gears = state.gears.filter((gear: DaliGear) =>
+          gear.deviceTypes?.includes(8),
+        );
 
         dt8Gears.forEach((gear: DaliGear) => {
           // Determine capabilities based on colourTypeFeatures

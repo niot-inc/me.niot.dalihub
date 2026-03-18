@@ -38,7 +38,6 @@ export interface DaliGear {
   address: number;
   level: number;
   lastUpdated: string;
-  deviceType?: number;
   deviceTypes?: number[];
   name: string;
   // DT8 colour properties
