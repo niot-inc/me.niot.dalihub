@@ -46,5 +46,8 @@
   },
   "1.2.0": {
     "en": "Add MQTT real-time events, DT8 colour light driver, and fade time control"
+  },
+  "1.2.1": {
+    "en": "Fix startup crash in push-button and occupancy-sensor when MQTT events arrive before initialization"
   }
 }
