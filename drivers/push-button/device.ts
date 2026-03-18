@@ -25,6 +25,7 @@ class PushButtonDevice extends Homey.Device {
 
   async handleButtonEvent(eventCode?: number) {
     if (eventCode === undefined) return;
+    if (!this.shortPressFlow) return;
 
     // this.log('Button event:', eventCode);
 
