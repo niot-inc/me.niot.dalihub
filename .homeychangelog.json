@@ -52,5 +52,8 @@
   },
   "1.2.2": {
     "en": "Update Node.js to 22 and fix device discovery to use deviceTypes array"
+  },
+  "1.2.3": {
+    "en": "Remove unused scene cards, update descriptions with DT8 support and installer link"
   }
 }
