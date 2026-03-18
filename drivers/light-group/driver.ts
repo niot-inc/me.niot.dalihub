@@ -32,6 +32,11 @@ class LightGroupDriver extends Homey.Driver {
         return args.device.setDaliLevel(args.level, fadeTime);
       });
 
+    this.homey.flow.getActionCard('light-group-set-dim')
+      .registerRunListener(async (args) => {
+        return args.device.setDim(args.brightness);
+      });
+
     this.homey.flow.getActionCard('light-group-set-dim-with-fade')
       .registerRunListener(async (args) => {
         const fadeTime = parseInt(args.fadeTime, 10);
