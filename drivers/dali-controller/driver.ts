@@ -60,38 +60,6 @@ class DaliControllerDriver extends Homey.Driver {
         return args.device.setLightMaxLevelPercent(args.bus, args.address, args.percent);
       });
 
-    // Register scene store/remove action cards for lights
-    this.homey.flow.getActionCard('light-store-scene')
-      .registerRunListener(async (args) => {
-        return args.device.storeLightScene(args.bus, args.address, args.scene, args.level);
-      });
-
-    this.homey.flow.getActionCard('light-store-scene-percent')
-      .registerRunListener(async (args) => {
-        return args.device.storeLightScenePercent(args.bus, args.address, args.scene, args.percent);
-      });
-
-    this.homey.flow.getActionCard('light-remove-scene')
-      .registerRunListener(async (args) => {
-        return args.device.removeLightScene(args.bus, args.address, args.scene);
-      });
-
-    // Register scene store/remove action cards for groups
-    this.homey.flow.getActionCard('group-store-scene')
-      .registerRunListener(async (args) => {
-        return args.device.storeGroupScene(args.bus, args.group, args.scene, args.level);
-      });
-
-    this.homey.flow.getActionCard('group-store-scene-percent')
-      .registerRunListener(async (args) => {
-        return args.device.storeGroupScenePercent(args.bus, args.group, args.scene, args.percent);
-      });
-
-    this.homey.flow.getActionCard('group-remove-scene')
-      .registerRunListener(async (args) => {
-        return args.device.removeGroupScene(args.bus, args.group, args.scene);
-      });
-
     // Register fade time action cards
     this.homey.flow.getActionCard('set-light-fade-time')
       .registerRunListener(async (args) => {
