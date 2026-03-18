@@ -49,5 +49,8 @@
   },
   "1.2.1": {
     "en": "Fix startup crash in push-button and occupancy-sensor when MQTT events arrive before initialization"
+  },
+  "1.2.2": {
+    "en": "Update Node.js to 22 and fix device discovery to use deviceTypes array"
   }
 }
