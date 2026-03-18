@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "me.niot.dalihub",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "platforms": [
@@ -683,6 +683,40 @@
           }
         ],
         "id": "dimmable-light-down"
+      },
+      {
+        "title": {
+          "en": "Set brightness",
+          "ko": "밝기 설정"
+        },
+        "titleFormatted": {
+          "en": "Set brightness to [[brightness]]%",
+          "ko": "밝기를 [[brightness]]%로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          },
+          {
+            "type": "range",
+            "name": "brightness",
+            "title": {
+              "en": "Brightness",
+              "ko": "밝기"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Brightness (%)",
+              "ko": "밝기 (%)"
+            }
+          }
+        ],
+        "id": "dimmable-light-set-dim"
       },
       {
         "title": {
@@ -1441,6 +1475,40 @@
           }
         ],
         "id": "light-group-down"
+      },
+      {
+        "title": {
+          "en": "Set brightness",
+          "ko": "밝기 설정"
+        },
+        "titleFormatted": {
+          "en": "Set brightness to [[brightness]]%",
+          "ko": "밝기를 [[brightness]]%로 설정"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          },
+          {
+            "type": "range",
+            "name": "brightness",
+            "title": {
+              "en": "Brightness",
+              "ko": "밝기"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "labelDecimals": 0,
+            "placeholder": {
+              "en": "Brightness (%)",
+              "ko": "밝기 (%)"
+            }
+          }
+        ],
+        "id": "light-group-set-dim"
       },
       {
         "title": {

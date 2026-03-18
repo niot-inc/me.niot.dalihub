@@ -55,5 +55,8 @@
   },
   "1.2.3": {
     "en": "Remove unused scene cards, update descriptions with DT8 support and installer link"
+  },
+  "1.2.4": {
+    "en": "Add brightness percentage action cards for lights and groups"
   }
 }
