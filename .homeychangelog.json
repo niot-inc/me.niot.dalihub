@@ -58,5 +58,8 @@
   },
   "1.2.4": {
     "en": "Add brightness percentage action cards for lights and groups"
+  },
+  "1.2.5": {
+    "en": "Clarify UP/DOWN action card titles with DALI command names"
   }
 }
