@@ -61,5 +61,8 @@
   },
   "1.2.5": {
     "en": "Clarify UP/DOWN action card titles with DALI command names"
+  },
+  "1.2.6": {
+    "en": "Decode occupancy sensor events using IEC 62386-303 bitfields and add still_occupied/still_vacant flow conditions"
   }
 }
