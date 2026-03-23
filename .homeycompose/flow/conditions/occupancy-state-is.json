@@ -41,6 +41,20 @@
             "en": "Vacant",
             "ko": "비어있음"
           }
+        },
+        {
+          "id": "still_occupied",
+          "label": {
+            "en": "Still occupied",
+            "ko": "계속 점유 중"
+          }
+        },
+        {
+          "id": "still_vacant",
+          "label": {
+            "en": "Still vacant",
+            "ko": "계속 비어있음"
+          }
         }
       ]
     }

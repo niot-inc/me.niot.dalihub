@@ -5,7 +5,7 @@ class OccupancySensorDevice extends Homey.Device {
   private address!: number;
   private instanceIndex!: number;
   private occupancyStateChangedFlow!: Homey.FlowCardTriggerDevice;
-  private occupancyState: 'vacant' | 'occupied_no_movement' | 'movement_detected' = 'vacant';
+  private occupancyState: string = 'vacant';
 
   async onInit() {
     const data = this.getData();
@@ -24,7 +24,7 @@ class OccupancySensorDevice extends Homey.Device {
     this.occupancyStateChangedFlow = this.homey.flow.getDeviceTriggerCard('occupancy-state-changed');
   }
 
-  getOccupancyState(): 'vacant' | 'occupied_no_movement' | 'movement_detected' {
+  getOccupancyState(): string {
     return this.occupancyState;
   }
 
@@ -32,43 +32,35 @@ class OccupancySensorDevice extends Homey.Device {
     if (eventCode === undefined) return;
     if (!this.occupancyStateChangedFlow) return;
 
-    this.log('Occupancy event:', eventCode);
+    // IEC 62386-303 bitfield decoding
+    const hasMovement = !!(eventCode & 0x01);
+    const occupancyBits = (eventCode >> 1) & 0x03;
+    const occupancyNames = ['vacant', 'occupied', 'still_vacant', 'still_occupied'];
+    const occupancy = occupancyNames[occupancyBits];
 
-    let newState: 'vacant' | 'occupied_no_movement' | 'movement_detected' | null = null;
-
-    switch (eventCode) {
-      case 8:
-        newState = 'vacant';
-        await this.setCapabilityValue('alarm_motion', false).catch(this.error);
-        this.log('State changed to: Vacant');
-        break;
-      case 10:
-        newState = 'occupied_no_movement';
-        await this.setCapabilityValue('alarm_motion', false).catch(this.error);
-        this.log('State changed to: Occupied (No movement)');
-        break;
-      case 11:
-        newState = 'movement_detected';
-        await this.setCapabilityValue('alarm_motion', true).catch(this.error);
-        this.log('State changed to: Movement detected');
-        break;
-      default:
-        this.log('Unknown event code:', eventCode);
-        break;
+    // Map to state string
+    let newState: string;
+    if (occupancy === 'vacant' || occupancy === 'still_vacant') {
+      newState = occupancy;
+    } else if (hasMovement) {
+      newState = 'movement_detected';
+    } else {
+      newState = occupancy === 'still_occupied' ? 'still_occupied' : 'occupied_no_movement';
     }
 
-    if (newState) {
-      this.occupancyState = newState;
+    // alarm_motion: true when movement detected
+    await this.setCapabilityValue('alarm_motion', hasMovement).catch(this.error);
+    this.log(`Occupancy event ${eventCode}: ${occupancy}, ${hasMovement ? 'movement' : 'no movement'} → ${newState}`);
 
-      this.log('Triggering flow card with state:', newState);
-      await this.occupancyStateChangedFlow.trigger(
-        this,
-        { state: newState },
-        { state: newState },
-      ).catch((err) => {
-        this.error('Failed to trigger flow card:', err);
-      });
-    }
+    this.occupancyState = newState;
+
+    await this.occupancyStateChangedFlow.trigger(
+      this,
+      { state: newState },
+      { state: newState },
+    ).catch((err) => {
+      this.error('Failed to trigger flow card:', err);
+    });
   }
 
   async onDeleted() {
