@@ -22,6 +22,20 @@
       },
       "values": [
         {
+          "id": "any_vacant",
+          "label": {
+            "en": "Any Vacant (vacant or still vacant)",
+            "ko": "비어있음 (비어짐 + 계속 비어있음)"
+          }
+        },
+        {
+          "id": "any_occupied",
+          "label": {
+            "en": "Any Occupied (occupied or still occupied)",
+            "ko": "점유중 (점유됨 + 계속 점유중)"
+          }
+        },
+        {
           "id": "vacant",
           "label": {
             "en": "Vacant",

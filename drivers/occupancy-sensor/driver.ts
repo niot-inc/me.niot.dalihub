@@ -9,6 +9,8 @@ class OccupancySensorDriver extends Homey.Driver {
     this.homey.flow.getConditionCard('occupancy-state-is')
       .registerRunListener(async (args) => {
         const currentState = args.device.getOccupancyState();
+        if (args.state === 'any_vacant') return currentState === 'vacant' || currentState === 'still_vacant';
+        if (args.state === 'any_occupied') return currentState === 'occupied' || currentState === 'still_occupied';
         return currentState === args.state;
       });
   }
