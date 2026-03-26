@@ -12,13 +12,31 @@
   ],
   "tokens": [
     {
-      "name": "state",
+      "name": "occupancy",
       "type": "string",
       "title": {
-        "en": "State",
-        "ko": "상태"
+        "en": "Occupancy",
+        "ko": "점유 상태"
       },
-      "example": "movement_detected"
+      "example": "occupied"
+    },
+    {
+      "name": "movement",
+      "type": "boolean",
+      "title": {
+        "en": "Movement",
+        "ko": "움직임"
+      },
+      "example": true
+    },
+    {
+      "name": "sensor_type",
+      "type": "string",
+      "title": {
+        "en": "Sensor type",
+        "ko": "센서 타입"
+      },
+      "example": "presence"
     }
   ]
 }

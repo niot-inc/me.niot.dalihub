@@ -5,6 +5,7 @@ class PushButtonDevice extends Homey.Device {
   private address!: number;
   private instanceIndex!: number;
   private shortPressFlow!: Homey.FlowCardTriggerDevice;
+  private doublePressFlow!: Homey.FlowCardTriggerDevice;
   private longPressStartFlow!: Homey.FlowCardTriggerDevice;
   private longPressRepeatFlow!: Homey.FlowCardTriggerDevice;
   private longPressStopFlow!: Homey.FlowCardTriggerDevice;
@@ -18,6 +19,7 @@ class PushButtonDevice extends Homey.Device {
     this.log('PushButtonDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Address ${this.address}, Instance ${this.instanceIndex})`);
 
     this.shortPressFlow = this.homey.flow.getDeviceTriggerCard('push-button-short-press');
+    this.doublePressFlow = this.homey.flow.getDeviceTriggerCard('push-button-double-press');
     this.longPressStartFlow = this.homey.flow.getDeviceTriggerCard('push-button-long-press-start');
     this.longPressRepeatFlow = this.homey.flow.getDeviceTriggerCard('push-button-long-press-repeat');
     this.longPressStopFlow = this.homey.flow.getDeviceTriggerCard('push-button-long-press-stop');
@@ -31,23 +33,19 @@ class PushButtonDevice extends Homey.Device {
 
     switch (eventCode) {
       case 2:
-        // this.log('Short Press');
         await this.shortPressFlow.trigger(this, {}, {}).catch(this.error);
         break;
+      case 3:
+        await this.doublePressFlow.trigger(this, {}, {}).catch(this.error);
+        break;
       case 9:
-        // this.log('Long Press Start');
         await this.longPressStartFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 11:
-        // this.log('Long Press Repeat');
         await this.longPressRepeatFlow.trigger(this, {}, {}).catch(this.error);
         break;
       case 12:
-        // this.log('Long Press Stop');
         await this.longPressStopFlow.trigger(this, {}, {}).catch(this.error);
-        break;
-      default:
-        // this.log('Unknown event code:', eventCode);
         break;
     }
   }

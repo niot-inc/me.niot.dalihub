@@ -6,7 +6,8 @@
   },
   "class": "sensor",
   "capabilities": [
-    "alarm_motion"
+    "alarm_motion",
+    "occupancy_state"
   ],
   "platforms": [
     "local"

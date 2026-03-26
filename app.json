@@ -144,16 +144,48 @@
         ],
         "tokens": [
           {
-            "name": "state",
+            "name": "occupancy",
             "type": "string",
             "title": {
-              "en": "State",
-              "ko": "상태"
+              "en": "Occupancy",
+              "ko": "점유 상태"
             },
-            "example": "movement_detected"
+            "example": "occupied"
+          },
+          {
+            "name": "movement",
+            "type": "boolean",
+            "title": {
+              "en": "Movement",
+              "ko": "움직임"
+            },
+            "example": true
+          },
+          {
+            "name": "sensor_type",
+            "type": "string",
+            "title": {
+              "en": "Sensor type",
+              "ko": "센서 타입"
+            },
+            "example": "presence"
           }
         ],
         "id": "occupancy-state-changed"
+      },
+      {
+        "title": {
+          "en": "Button double pressed",
+          "ko": "버튼 두 번 누름"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=push-button"
+          }
+        ],
+        "id": "push-button-double-press"
       },
       {
         "title": {
@@ -419,6 +451,72 @@
       },
       {
         "title": {
+          "en": "Illuminance is greater than",
+          "ko": "조도 이벤트 값이 더 크면"
+        },
+        "titleFormatted": {
+          "en": "Illuminance is greater than [[value]]",
+          "ko": "조도 이벤트 값이 [[value]]보다 크면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lux-sensor"
+          },
+          {
+            "type": "number",
+            "name": "value",
+            "title": {
+              "en": "Illuminance value",
+              "ko": "조도 이벤트 값"
+            },
+            "min": 0,
+            "max": 1023,
+            "step": 1,
+            "placeholder": {
+              "en": "0-1023",
+              "ko": "0-1023"
+            }
+          }
+        ],
+        "id": "illuminance-greater-than"
+      },
+      {
+        "title": {
+          "en": "Illuminance is less than",
+          "ko": "조도 이벤트 값이 더 작으면"
+        },
+        "titleFormatted": {
+          "en": "Illuminance is less than [[value]]",
+          "ko": "조도 이벤트 값이 [[value]]보다 작으면"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=lux-sensor"
+          },
+          {
+            "type": "number",
+            "name": "value",
+            "title": {
+              "en": "Illuminance value",
+              "ko": "조도 이벤트 값"
+            },
+            "min": 0,
+            "max": 1023,
+            "step": 1,
+            "placeholder": {
+              "en": "0-1023",
+              "ko": "0-1023"
+            }
+          }
+        ],
+        "id": "illuminance-less-than"
+      },
+      {
+        "title": {
           "en": "Brightness is greater than",
           "ko": "밝기가 더 크면"
         },
@@ -621,11 +719,11 @@
       },
       {
         "title": {
-          "en": "Occupancy state !{{is|is not}}...",
+          "en": "Occupancy !{{is|is not}}...",
           "ko": "점유 상태가 !{{~이면|~이 아니면}}..."
         },
         "titleFormatted": {
-          "en": "Occupancy state !{{is|is not}} [[state]]",
+          "en": "Occupancy !{{is|is not}} [[state]]",
           "ko": "점유 상태가 [[state]] !{{이면|이 아니면}}"
         },
         "args": [
@@ -643,31 +741,17 @@
             },
             "values": [
               {
-                "id": "movement_detected",
-                "label": {
-                  "en": "Movement detected",
-                  "ko": "움직임 감지됨"
-                }
-              },
-              {
-                "id": "occupied_no_movement",
-                "label": {
-                  "en": "Occupied, no movement",
-                  "ko": "점유, 움직임 없음"
-                }
-              },
-              {
                 "id": "vacant",
                 "label": {
                   "en": "Vacant",
-                  "ko": "비어있음"
+                  "ko": "비어짐"
                 }
               },
               {
-                "id": "still_occupied",
+                "id": "occupied",
                 "label": {
-                  "en": "Still occupied",
-                  "ko": "계속 점유 중"
+                  "en": "Occupied",
+                  "ko": "점유됨"
                 }
               },
               {
@@ -675,6 +759,13 @@
                 "label": {
                   "en": "Still vacant",
                   "ko": "계속 비어있음"
+                }
+              },
+              {
+                "id": "still_occupied",
+                "label": {
+                  "en": "Still occupied",
+                  "ko": "계속 점유중"
                 }
               }
             ]
@@ -3459,7 +3550,8 @@
       },
       "class": "sensor",
       "capabilities": [
-        "measure_luminance"
+        "measure_luminance",
+        "measure_illuminance"
       ],
       "platforms": [
         "local"
@@ -3494,7 +3586,8 @@
       },
       "class": "sensor",
       "capabilities": [
-        "alarm_motion"
+        "alarm_motion",
+        "occupancy_state"
       ],
       "platforms": [
         "local"
@@ -3579,6 +3672,74 @@
       "uiComponent": "slider",
       "uiQuickAction": true,
       "icon": "/assets/capability_icons/dali_level.svg"
+    },
+    "measure_illuminance": {
+      "type": "number",
+      "title": {
+        "en": "Illuminance",
+        "ko": "조도 이벤트"
+      },
+      "desc": {
+        "en": "Relative illuminance from DALI Part 304 events (0-1023)",
+        "ko": "DALI Part 304 이벤트 기반 상대 조도 (0-1023)"
+      },
+      "units": {
+        "en": "",
+        "ko": ""
+      },
+      "min": 0,
+      "max": 1023,
+      "step": 1,
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capability_icons/illuminance.svg"
+    },
+    "occupancy_state": {
+      "type": "enum",
+      "title": {
+        "en": "Occupancy",
+        "ko": "점유 상태"
+      },
+      "desc": {
+        "en": "Occupancy state from DALI Part 303 sensor (bit 1-2)",
+        "ko": "DALI Part 303 센서 점유 상태 (bit 1-2)"
+      },
+      "values": [
+        {
+          "id": "vacant",
+          "title": {
+            "en": "Vacant",
+            "ko": "비어짐"
+          }
+        },
+        {
+          "id": "occupied",
+          "title": {
+            "en": "Occupied",
+            "ko": "점유됨"
+          }
+        },
+        {
+          "id": "still_vacant",
+          "title": {
+            "en": "Still vacant",
+            "ko": "계속 비어있음"
+          }
+        },
+        {
+          "id": "still_occupied",
+          "title": {
+            "en": "Still occupied",
+            "ko": "계속 점유중"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/drivers/occupancy-sensor/assets/icon.svg"
     }
   }
 }

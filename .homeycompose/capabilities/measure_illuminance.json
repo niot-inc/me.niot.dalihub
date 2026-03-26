@@ -1,0 +1,23 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Illuminance",
+    "ko": "조도 이벤트"
+  },
+  "desc": {
+    "en": "Relative illuminance from DALI Part 304 events (0-1023)",
+    "ko": "DALI Part 304 이벤트 기반 상대 조도 (0-1023)"
+  },
+  "units": {
+    "en": "",
+    "ko": ""
+  },
+  "min": 0,
+  "max": 1023,
+  "step": 1,
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capability_icons/illuminance.svg"
+}

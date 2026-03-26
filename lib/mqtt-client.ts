@@ -12,11 +12,13 @@
  * - Topic Prefix: dalihub
  *
  * Topic structure (published by DALIHub server):
- * - {prefix}/state/gear/{busId}/{address}           -> gear level changes
- * - {prefix}/state/group/{busId}/{groupId}          -> group level changes
- * - {prefix}/state/control-device/{busId}/{address} -> button/sensor events
- * - {prefix}/state/lux/{busId}/{address}/{instance} -> lux sensor readings
- * - {prefix}/status                                  -> server online/offline
+ * - {prefix}/state/gear/{busId}/{address}                    -> gear level changes
+ * - {prefix}/state/group/{busId}/{groupId}                   -> group level changes
+ * - {prefix}/state/push-button/{busId}/{address}/{instance}  -> push button events (Part 301)
+ * - {prefix}/state/occupancy/{busId}/{address}/{instance}    -> occupancy sensor events (Part 303)
+ * - {prefix}/state/lux/{busId}/{address}/{instance}          -> lux sensor readings (polled)
+ * - {prefix}/state/illuminance/{busId}/{address}/{instance}  -> illuminance events (Part 304)
+ * - {prefix}/status                                           -> server online/offline
  */
 
 import mqtt, { MqttClient, IClientOptions } from 'mqtt';
@@ -118,11 +120,13 @@ export class DaliMqttClient {
 
     const prefix = this.config.topicPrefix;
     const topics = [
-      `${prefix}/state/gear/+/+`,           // gear.changed
-      `${prefix}/state/group/+/+`,          // group.changed
-      `${prefix}/state/control-device/+/+`, // control-device.changed
-      `${prefix}/state/lux/+/+/+`,          // control-device.lux
-      `${prefix}/status`,                   // online/offline
+      `${prefix}/state/gear/+/+`,              // gear.changed
+      `${prefix}/state/group/+/+`,             // group.changed
+      `${prefix}/state/push-button/+/+/+`,    // push-button.event
+      `${prefix}/state/occupancy/+/+/+`,      // occupancy.event
+      `${prefix}/state/lux/+/+/+`,            // control-device.lux
+      `${prefix}/state/illuminance/+/+/+`,    // control-device.illuminance
+      `${prefix}/status`,                      // online/offline
     ];
 
     topics.forEach((topic) => {
@@ -189,25 +193,48 @@ export class DaliMqttClient {
       return;
     }
 
-    const controlDeviceMatch = topic.match(new RegExp(`^${prefix}/state/control-device/(\\d+)/(\\d+)$`));
-    if (controlDeviceMatch) {
-      const busId = parseInt(controlDeviceMatch[1], 10);
-      const address = parseInt(controlDeviceMatch[2], 10);
+    const pushButtonMatch = topic.match(new RegExp(`^${prefix}/state/push-button/(\\d+)/(\\d+)/(\\d+)$`));
+    if (pushButtonMatch) {
+      const busId = parseInt(pushButtonMatch[1], 10);
+      const address = parseInt(pushButtonMatch[2], 10);
+      const instanceIndex = parseInt(pushButtonMatch[3], 10);
       try {
         const data = JSON.parse(message);
-        if (data.lastEvent) {
-          const event: DaliEvent = {
-            type: 'control-device.changed',
-            busId,
-            address,
-            instanceIndex: data.lastEvent.instanceIndex,
-            eventCode: data.lastEvent.eventCode,
-            lastEvent: data.lastEvent,
-          };
-          this.emitEvent(event);
-        }
+        const event: DaliEvent = {
+          type: 'push-button.event',
+          busId,
+          address,
+          instanceIndex,
+          eventName: data.eventName,
+          eventCode: data.eventCode,
+        };
+        this.emitEvent(event);
       } catch (error) {
-        this.log('Error parsing control-device message:', error);
+        this.log('Error parsing push-button message:', error);
+      }
+      return;
+    }
+
+    const occupancyMatch = topic.match(new RegExp(`^${prefix}/state/occupancy/(\\d+)/(\\d+)/(\\d+)$`));
+    if (occupancyMatch) {
+      const busId = parseInt(occupancyMatch[1], 10);
+      const address = parseInt(occupancyMatch[2], 10);
+      const instanceIndex = parseInt(occupancyMatch[3], 10);
+      try {
+        const data = JSON.parse(message);
+        const event: DaliEvent = {
+          type: 'occupancy.event',
+          busId,
+          address,
+          instanceIndex,
+          movement: data.movement,
+          occupancy: data.occupancy,
+          sensorType: data.sensorType,
+          eventCode: data.eventCode,
+        };
+        this.emitEvent(event);
+      } catch (error) {
+        this.log('Error parsing occupancy message:', error);
       }
       return;
     }
@@ -229,6 +256,27 @@ export class DaliMqttClient {
         this.emitEvent(event);
       } catch (error) {
         this.log('Error parsing lux message:', error);
+      }
+      return;
+    }
+
+    const illuminanceMatch = topic.match(new RegExp(`^${prefix}/state/illuminance/(\\d+)/(\\d+)/(\\d+)$`));
+    if (illuminanceMatch) {
+      const busId = parseInt(illuminanceMatch[1], 10);
+      const address = parseInt(illuminanceMatch[2], 10);
+      const instanceIndex = parseInt(illuminanceMatch[3], 10);
+      try {
+        const data = JSON.parse(message);
+        const event: DaliEvent = {
+          type: 'control-device.illuminance',
+          busId,
+          address,
+          instanceIndex,
+          illuminance: data.illuminance,
+        };
+        this.emitEvent(event);
+      } catch (error) {
+        this.log('Error parsing illuminance message:', error);
       }
     }
   }
@@ -285,7 +333,7 @@ export class DaliMqttClient {
 
   private emitEvent(event: DaliEvent): void {
     // Skip logging for sensor events to reduce noise
-    if (event.type !== 'control-device.lux' && event.type !== 'control-device.changed') {
+    if (event.type !== 'control-device.lux' && event.type !== 'control-device.illuminance' && event.type !== 'occupancy.event') {
       this.log('MQTT event received:', event.type, event);
     }
 

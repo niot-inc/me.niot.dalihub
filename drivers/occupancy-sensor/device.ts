@@ -5,7 +5,6 @@ class OccupancySensorDevice extends Homey.Device {
   private address!: number;
   private instanceIndex!: number;
   private occupancyStateChangedFlow!: Homey.FlowCardTriggerDevice;
-  private occupancyState: string = 'vacant';
 
   async onInit() {
     const data = this.getData();
@@ -15,17 +14,21 @@ class OccupancySensorDevice extends Homey.Device {
 
     this.log('OccupancySensorDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Address ${this.address}, Instance ${this.instanceIndex})`);
 
-    // Add alarm_motion capability if it doesn't exist (for existing paired devices)
+    // Add capabilities if they don't exist (for existing paired devices)
     if (!this.hasCapability('alarm_motion')) {
       await this.addCapability('alarm_motion').catch(this.error);
       this.log('Added alarm_motion capability');
+    }
+    if (!this.hasCapability('occupancy_state')) {
+      await this.addCapability('occupancy_state').catch(this.error);
+      this.log('Added occupancy_state capability');
     }
 
     this.occupancyStateChangedFlow = this.homey.flow.getDeviceTriggerCard('occupancy-state-changed');
   }
 
   getOccupancyState(): string {
-    return this.occupancyState;
+    return this.getCapabilityValue('occupancy_state') || 'vacant';
   }
 
   async handleOccupancyEvent(eventCode?: number) {
@@ -33,31 +36,36 @@ class OccupancySensorDevice extends Homey.Device {
     if (!this.occupancyStateChangedFlow) return;
 
     // IEC 62386-303 bitfield decoding
+    // bit 0: movement (0=no movement, 1=movement)
+    // bit 1-2: occupancy state (00=vacant, 01=occupied, 10=still vacant, 11=still occupied)
+    // bit 3: sensor type (0=presence sensor, 1=movement sensor)
     const hasMovement = !!(eventCode & 0x01);
     const occupancyBits = (eventCode >> 1) & 0x03;
-    const occupancyNames = ['vacant', 'occupied', 'still_vacant', 'still_occupied'];
+    const isMovementSensor = !!(eventCode & 0x08);
+
+    const occupancyNames = ['vacant', 'occupied', 'still_vacant', 'still_occupied'] as const;
     const occupancy = occupancyNames[occupancyBits];
+    const sensorType = isMovementSensor ? 'movement' : 'presence';
 
-    // Map to state string
-    let newState: string;
-    if (occupancy === 'vacant' || occupancy === 'still_vacant') {
-      newState = occupancy;
-    } else if (hasMovement) {
-      newState = 'movement_detected';
-    } else {
-      newState = occupancy === 'still_occupied' ? 'still_occupied' : 'occupied_no_movement';
-    }
-
-    // alarm_motion: true when movement detected
+    // Update capabilities
     await this.setCapabilityValue('alarm_motion', hasMovement).catch(this.error);
-    this.log(`Occupancy event ${eventCode}: ${occupancy}, ${hasMovement ? 'movement' : 'no movement'} → ${newState}`);
+    await this.setCapabilityValue('occupancy_state', occupancy).catch(this.error);
 
-    this.occupancyState = newState;
+    this.log(`Occupancy event 0x${eventCode.toString(16)}: ${occupancy}, ${hasMovement ? 'movement' : 'no movement'}, ${sensorType} sensor`);
 
+    // Trigger flow with all decoded fields
     await this.occupancyStateChangedFlow.trigger(
       this,
-      { state: newState },
-      { state: newState },
+      {
+        occupancy,
+        movement: hasMovement,
+        sensor_type: sensorType,
+      },
+      {
+        occupancy,
+        movement: hasMovement,
+        sensor_type: sensorType,
+      },
     ).catch((err) => {
       this.error('Failed to trigger flow card:', err);
     });

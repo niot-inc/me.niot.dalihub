@@ -68,6 +68,8 @@ export interface DaliControlDeviceInstance {
   name: string;
   luxValue?: number;
   luxUpdated?: string;
+  illuminance?: number;
+  illuminanceUpdated?: string;
 }
 
 export interface DaliControlDevice {
@@ -82,22 +84,13 @@ export interface DaliState {
   controlDevices: DaliControlDevice[];
 }
 
-export interface DaliEvent {
-  type: 'gear.changed' | 'group.changed' | 'control-device.changed' | 'control-device.lux';
-  busId: number;
-  address?: number;
-  groupId?: number;
-  level?: number;
-  instanceIndex?: number;
-  eventCode?: number;
-  luxValue?: number;
-  memberCount?: number;
-  lastEvent?: {
-    instanceIndex: number;
-    eventCode: number;
-    timestamp: string;
-  };
-}
+export type DaliEvent =
+  | { type: 'gear.changed'; busId: number; address: number; level: number }
+  | { type: 'group.changed'; busId: number; groupId: number; level: number; memberCount?: number }
+  | { type: 'push-button.event'; busId: number; address: number; instanceIndex: number; eventName: string; eventCode: number }
+  | { type: 'occupancy.event'; busId: number; address: number; instanceIndex: number; movement: boolean; occupancy: string; sensorType: string; eventCode: number }
+  | { type: 'control-device.lux'; busId: number; address: number; instanceIndex: number; luxValue: number }
+  | { type: 'control-device.illuminance'; busId: number; address: number; instanceIndex: number; illuminance: number };
 
 export class DaliApiClient {
   private baseUrl: string;

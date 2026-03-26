@@ -1,0 +1,32 @@
+{
+  "title": {
+    "en": "Illuminance is less than",
+    "ko": "조도 이벤트 값이 더 작으면"
+  },
+  "titleFormatted": {
+    "en": "Illuminance is less than [[value]]",
+    "ko": "조도 이벤트 값이 [[value]]보다 작으면"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=lux-sensor"
+    },
+    {
+      "type": "number",
+      "name": "value",
+      "title": {
+        "en": "Illuminance value",
+        "ko": "조도 이벤트 값"
+      },
+      "min": 0,
+      "max": 1023,
+      "step": 1,
+      "placeholder": {
+        "en": "0-1023",
+        "ko": "0-1023"
+      }
+    }
+  ]
+}

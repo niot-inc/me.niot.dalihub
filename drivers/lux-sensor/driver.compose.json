@@ -6,7 +6,8 @@
   },
   "class": "sensor",
   "capabilities": [
-    "measure_luminance"
+    "measure_luminance",
+    "measure_illuminance"
   ],
   "platforms": [
     "local"

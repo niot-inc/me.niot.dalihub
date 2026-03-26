@@ -1,0 +1,45 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Occupancy",
+    "ko": "점유 상태"
+  },
+  "desc": {
+    "en": "Occupancy state from DALI Part 303 sensor (bit 1-2)",
+    "ko": "DALI Part 303 센서 점유 상태 (bit 1-2)"
+  },
+  "values": [
+    {
+      "id": "vacant",
+      "title": {
+        "en": "Vacant",
+        "ko": "비어짐"
+      }
+    },
+    {
+      "id": "occupied",
+      "title": {
+        "en": "Occupied",
+        "ko": "점유됨"
+      }
+    },
+    {
+      "id": "still_vacant",
+      "title": {
+        "en": "Still vacant",
+        "ko": "계속 비어있음"
+      }
+    },
+    {
+      "id": "still_occupied",
+      "title": {
+        "en": "Still occupied",
+        "ko": "계속 점유중"
+      }
+    }
+  ],
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/drivers/occupancy-sensor/assets/icon.svg"
+}

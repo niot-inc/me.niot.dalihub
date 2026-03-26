@@ -10,6 +10,7 @@ interface DaliDevice extends Homey.Device {
   handleOccupancyEvent?(eventCode: number): Promise<void>;
   handleButtonEvent?(eventCode: number): Promise<void>;
   updateLuxValue?(luxValue: number): Promise<void>;
+  updateIlluminance?(illuminance: number): Promise<void>;
 }
 
 class DaliHubApp extends Homey.App {
@@ -138,12 +139,20 @@ class DaliHubApp extends Homey.App {
       this.handleGroupChanged(event);
     });
 
-    this.mqttClient.on('control-device.changed', (event) => {
-      this.handleControlDeviceChanged(event);
+    this.mqttClient.on('push-button.event', (event) => {
+      this.handlePushButtonEvent(event);
+    });
+
+    this.mqttClient.on('occupancy.event', (event) => {
+      this.handleOccupancyEvent(event);
     });
 
     this.mqttClient.on('control-device.lux', (event) => {
       this.handleControlDeviceLux(event);
+    });
+
+    this.mqttClient.on('control-device.illuminance', (event) => {
+      this.handleControlDeviceIlluminance(event);
     });
 
     this.mqttClient.onStatus((online) => {
@@ -158,10 +167,9 @@ class DaliHubApp extends Homey.App {
   }
 
   private handleGearChanged(event: DaliEvent): void {
-    if (event.address === undefined || event.level === undefined) return;
+    if (event.type !== 'gear.changed') return;
 
-    const { level } = event;
-    const { address } = event;
+    const { level, address } = event;
 
     this.log(`Gear Changed - Bus ${event.busId}, Address ${address}, Level ${level}`);
 
@@ -192,12 +200,9 @@ class DaliHubApp extends Homey.App {
   }
 
   private handleGroupChanged(event: DaliEvent): void {
-    if (event.groupId === undefined || event.level === undefined) {
-      return;
-    }
+    if (event.type !== 'group.changed') return;
 
-    const { level } = event;
-    const { groupId } = event;
+    const { level, groupId } = event;
 
     this.log(`Group Changed - Bus ${event.busId}, Group ${groupId}, Level ${level}`);
 
@@ -224,63 +229,50 @@ class DaliHubApp extends Homey.App {
     }
   }
 
-  private handleControlDeviceChanged(event: DaliEvent): void {
-    if (event.address === undefined || event.instanceIndex === undefined || event.eventCode === undefined) {
-      return;
-    }
+  private handlePushButtonEvent(event: DaliEvent): void {
+    if (event.type !== 'push-button.event') return;
+    const { busId, address, instanceIndex, eventCode } = event;
 
-    const { address } = event;
-    const { instanceIndex } = event;
-    const { eventCode } = event;
+    const driver = this.homey.drivers.getDrivers()['push-button'];
+    if (!driver) return;
 
-    const state = this.daliState.get(event.busId);
-    if (state) {
-      const controlDevice = state.controlDevices.find((cd) => cd.address === address);
-      if (controlDevice) {
-        const instance = controlDevice.instances.find((i) => i.index === instanceIndex);
-        if (instance && instance.type === 3) {
-          const drivers = this.homey.drivers.getDrivers();
-          const driver = drivers['occupancy-sensor'];
-          if (driver) {
-            const devices = driver.getDevices() as DaliDevice[];
-            devices.forEach((device) => {
-              const deviceData = device.getData();
-              if (deviceData.busId === event.busId
-                  && deviceData.address === address
-                  && deviceData.instanceIndex === instanceIndex) {
-                device.handleOccupancyEvent?.(eventCode).catch((err: Error) => {
-                  this.error('Failed to handle occupancy event:', err);
-                });
-              }
-            });
-          }
-        } else if (instance && instance.type === 1) {
-          const drivers = this.homey.drivers.getDrivers();
-          const driver = drivers['push-button'];
-          if (driver) {
-            const devices = driver.getDevices() as DaliDevice[];
-            devices.forEach((device) => {
-              const deviceData = device.getData();
-              if (deviceData.busId === event.busId
-                  && deviceData.address === address
-                  && deviceData.instanceIndex === instanceIndex) {
-                device.handleButtonEvent?.(eventCode).catch((err: Error) => {
-                  this.error('Failed to handle button event:', err);
-                });
-              }
-            });
-          }
-        }
+    const devices = driver.getDevices() as DaliDevice[];
+    devices.forEach((device) => {
+      const deviceData = device.getData();
+      if (deviceData.busId === busId
+          && deviceData.address === address
+          && deviceData.instanceIndex === instanceIndex) {
+        device.handleButtonEvent?.(eventCode).catch((err: Error) => {
+          this.error('Failed to handle button event:', err);
+        });
       }
-    }
+    });
+  }
+
+  private handleOccupancyEvent(event: DaliEvent): void {
+    if (event.type !== 'occupancy.event') return;
+    const { busId, address, instanceIndex, eventCode } = event;
+
+    const driver = this.homey.drivers.getDrivers()['occupancy-sensor'];
+    if (!driver) return;
+
+    const devices = driver.getDevices() as DaliDevice[];
+    devices.forEach((device) => {
+      const deviceData = device.getData();
+      if (deviceData.busId === busId
+          && deviceData.address === address
+          && deviceData.instanceIndex === instanceIndex) {
+        device.handleOccupancyEvent?.(eventCode).catch((err: Error) => {
+          this.error('Failed to handle occupancy event:', err);
+        });
+      }
+    });
   }
 
   private handleControlDeviceLux(event: DaliEvent): void {
-    if (event.address === undefined || event.instanceIndex === undefined || event.luxValue === undefined) return;
+    if (event.type !== 'control-device.lux') return;
 
-    const { address } = event;
-    const { instanceIndex } = event;
-    const { luxValue } = event;
+    const { address, instanceIndex, luxValue } = event;
 
     const state = this.daliState.get(event.busId);
     if (state) {
@@ -304,6 +296,39 @@ class DaliHubApp extends Homey.App {
             && deviceData.instanceIndex === instanceIndex) {
           device.updateLuxValue?.(luxValue).catch((err: Error) => {
             this.error('Failed to update lux value:', err);
+          });
+        }
+      });
+    }
+  }
+
+  private handleControlDeviceIlluminance(event: DaliEvent): void {
+    if (event.type !== 'control-device.illuminance') return;
+
+    const { address, instanceIndex, illuminance } = event;
+
+    const state = this.daliState.get(event.busId);
+    if (state) {
+      const controlDevice = state.controlDevices.find((cd) => cd.address === address);
+      if (controlDevice) {
+        const instance = controlDevice.instances.find((i) => i.index === instanceIndex);
+        if (instance) {
+          instance.illuminance = illuminance;
+          instance.illuminanceUpdated = new Date().toISOString();
+        }
+      }
+    }
+
+    const driver = this.homey.drivers.getDriver('lux-sensor');
+    if (driver) {
+      const devices = driver.getDevices() as DaliDevice[];
+      devices.forEach((device) => {
+        const deviceData = device.getData();
+        if (deviceData.busId === event.busId
+            && deviceData.address === address
+            && deviceData.instanceIndex === instanceIndex) {
+          device.updateIlluminance?.(illuminance).catch((err: Error) => {
+            this.error('Failed to update illuminance:', err);
           });
         }
       });

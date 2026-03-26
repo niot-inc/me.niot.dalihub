@@ -17,6 +17,19 @@ class LuxSensorDriver extends Homey.Driver {
         const currentLux = args.device.getLuxValue();
         return currentLux < args.lux;
       });
+
+    // Register condition cards for illuminance (Part 304 events)
+    this.homey.flow.getConditionCard('illuminance-greater-than')
+      .registerRunListener(async (args) => {
+        const illuminance = args.device.getIlluminance();
+        return illuminance > args.value;
+      });
+
+    this.homey.flow.getConditionCard('illuminance-less-than')
+      .registerRunListener(async (args) => {
+        const illuminance = args.device.getIlluminance();
+        return illuminance < args.value;
+      });
   }
 
   async onPairListDevices() {
