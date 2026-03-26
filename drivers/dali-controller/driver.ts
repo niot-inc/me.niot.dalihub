@@ -22,19 +22,19 @@ class DaliControllerDriver extends Homey.Driver {
 
     this.homey.flow.getActionCard('scene-recall-address-with-fade')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.recallScene(args.bus, args.scene, 'address', args.address, fadeTime);
       });
 
     this.homey.flow.getActionCard('scene-recall-group-with-fade')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.recallScene(args.bus, args.scene, 'group', args.group, fadeTime);
       });
 
     this.homey.flow.getActionCard('scene-recall-broadcast-with-fade')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.recallScene(args.bus, args.scene, 'broadcast', 0, fadeTime);
       });
 
@@ -63,19 +63,19 @@ class DaliControllerDriver extends Homey.Driver {
     // Register fade time action cards
     this.homey.flow.getActionCard('set-light-fade-time')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.setLightFadeTime(args.bus, args.address, fadeTime);
       });
 
     this.homey.flow.getActionCard('set-group-fade-time')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.setGroupFadeTime(args.bus, args.group, fadeTime);
       });
 
     this.homey.flow.getActionCard('set-all-fade-time')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.setAllFadeTime(args.bus, fadeTime);
       });
   }
@@ -83,7 +83,7 @@ class DaliControllerDriver extends Homey.Driver {
   async onPairListDevices() {
     // Create a single DALI controller device
     const devices = [{
-      name: 'DALI 컨트롤러',
+      name: 'DALI Controller',
       data: {
         id: 'dali-controller',
       },

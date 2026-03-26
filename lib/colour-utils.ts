@@ -22,6 +22,10 @@ export interface HSV {
  * @returns RGB object with r, g, b values (0-255)
  */
 export function hsvToRgb(h: number, s: number, v: number): RGB {
+  h = ((h % 360) + 360) % 360; // Normalize to 0-360
+  s = Math.max(0, Math.min(1, s));
+  v = Math.max(0, Math.min(1, v));
+
   let r = 0;
   let g = 0;
   let b = 0;
@@ -56,6 +60,10 @@ export function hsvToRgb(h: number, s: number, v: number): RGB {
  * @returns HSV object with h (0-360), s (0-1), v (0-1)
  */
 export function rgbToHsv(r: number, g: number, b: number): HSV {
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+
   const r01 = r / 255;
   const g01 = g / 255;
   const b01 = b / 255;

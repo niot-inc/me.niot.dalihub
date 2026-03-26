@@ -28,7 +28,7 @@ class LightGroupDriver extends Homey.Driver {
 
     this.homey.flow.getActionCard('light-group-set-level-with-fade')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.setDaliLevel(args.level, fadeTime);
       });
 
@@ -39,32 +39,32 @@ class LightGroupDriver extends Homey.Driver {
 
     this.homey.flow.getActionCard('light-group-set-dim-with-fade')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.setDimWithFade(args.brightness, fadeTime);
       });
 
     // Register condition cards
     this.homey.flow.getConditionCard('light-group-brightness-greater')
       .registerRunListener(async (args) => {
-        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        const currentBrightness = (args.device.getCapabilityValue('dim') ?? 0) * 100;
         return currentBrightness > args.brightness;
       });
 
     this.homey.flow.getConditionCard('light-group-brightness-less')
       .registerRunListener(async (args) => {
-        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        const currentBrightness = (args.device.getCapabilityValue('dim') ?? 0) * 100;
         return currentBrightness < args.brightness;
       });
 
     this.homey.flow.getConditionCard('light-group-level-greater')
       .registerRunListener(async (args) => {
-        const currentLevel = args.device.getCapabilityValue('dali_level');
+        const currentLevel = args.device.getCapabilityValue('dali_level') ?? 0;
         return currentLevel > args.level;
       });
 
     this.homey.flow.getConditionCard('light-group-level-less')
       .registerRunListener(async (args) => {
-        const currentLevel = args.device.getCapabilityValue('dali_level');
+        const currentLevel = args.device.getCapabilityValue('dali_level') ?? 0;
         return currentLevel < args.level;
       });
   }

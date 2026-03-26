@@ -32,7 +32,7 @@ class DT8LightDriver extends Homey.Driver {
 
     this.homey.flow.getActionCard('dt8-light-set-level-with-fade')
       .registerRunListener(async (args) => {
-        const fadeTime = parseInt(args.fadeTime, 10);
+        const fadeTime = parseInt(args.fadeTime, 10) || 0;
         return args.device.setDaliLevel(args.level, fadeTime);
       });
 
@@ -44,13 +44,13 @@ class DT8LightDriver extends Homey.Driver {
     // Register condition cards
     this.homey.flow.getConditionCard('dt8-light-brightness-greater')
       .registerRunListener(async (args) => {
-        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        const currentBrightness = (args.device.getCapabilityValue('dim') ?? 0) * 100;
         return currentBrightness > args.brightness;
       });
 
     this.homey.flow.getConditionCard('dt8-light-brightness-less')
       .registerRunListener(async (args) => {
-        const currentBrightness = args.device.getCapabilityValue('dim') * 100;
+        const currentBrightness = (args.device.getCapabilityValue('dim') ?? 0) * 100;
         return currentBrightness < args.brightness;
       });
   }

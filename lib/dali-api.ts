@@ -116,11 +116,15 @@ export class DaliApiClient {
         });
 
         res.on('end', () => {
-          try {
-            const state = JSON.parse(data);
-            resolve(state);
-          } catch (error) {
-            reject(error);
+          if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+            try {
+              const state = JSON.parse(data);
+              resolve(state);
+            } catch (error) {
+              reject(error);
+            }
+          } else {
+            reject(new Error(`Request failed with status ${res.statusCode}: ${data}`));
           }
         });
       }).on('error', (error) => {
@@ -428,7 +432,7 @@ export class DaliApiClient {
 
       const options = {
         hostname: url.hostname,
-        port: url.port || 80,
+        port: url.port || 3000,
         path: url.pathname + url.search,
         method: 'POST',
         headers: {
