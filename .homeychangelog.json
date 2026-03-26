@@ -67,5 +67,8 @@
   },
   "1.3.0": {
     "en": "Refactor event system, add illuminance capability and occupancy state enum, support push button double press and scheme 2   instance identification."
+  },
+  "1.3.1": {
+    "en": "Add grouped occupancy conditions (Any Vacant / Any Occupied)"
   }
 }

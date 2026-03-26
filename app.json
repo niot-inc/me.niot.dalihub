@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "me.niot.dalihub",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "compatibility": ">=12.4.0",
   "sdk": 3,
   "platforms": [
@@ -740,6 +740,20 @@
               "ko": "상태"
             },
             "values": [
+              {
+                "id": "any_vacant",
+                "label": {
+                  "en": "Any Vacant (vacant or still vacant)",
+                  "ko": "비어있음 (비어짐 + 계속 비어있음)"
+                }
+              },
+              {
+                "id": "any_occupied",
+                "label": {
+                  "en": "Any Occupied (occupied or still occupied)",
+                  "ko": "점유중 (점유됨 + 계속 점유중)"
+                }
+              },
               {
                 "id": "vacant",
                 "label": {
@@ -3694,6 +3708,7 @@
       "getable": true,
       "setable": false,
       "uiComponent": "sensor",
+      "insights": true,
       "icon": "/assets/capability_icons/illuminance.svg"
     },
     "occupancy_state": {
@@ -3739,6 +3754,7 @@
       "getable": true,
       "setable": false,
       "uiComponent": "sensor",
+      "insights": true,
       "icon": "/drivers/occupancy-sensor/assets/icon.svg"
     }
   }
