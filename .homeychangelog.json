@@ -64,5 +64,8 @@
   },
   "1.2.6": {
     "en": "Decode occupancy sensor events using IEC 62386-303 bitfields and add still_occupied/still_vacant flow conditions"
+  },
+  "1.3.0": {
+    "en": "Refactor event system, add illuminance capability and occupancy state enum, support push button double press and scheme 2   instance identification."
   }
 }
