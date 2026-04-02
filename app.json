@@ -57,6 +57,64 @@
     "triggers": [
       {
         "title": {
+          "en": "Turned off by external command",
+          "ko": "외부 명령으로 꺼짐"
+        },
+        "hint": {
+          "en": "Triggered when an external DALI command turns this light off",
+          "ko": "외부 DALI 명령으로 이 조명이 꺼질 때 트리거됩니다"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "Command",
+              "ko": "명령어"
+            },
+            "example": "OFF"
+          }
+        ],
+        "id": "dimmable-light-external-off"
+      },
+      {
+        "title": {
+          "en": "Turned on by external command",
+          "ko": "외부 명령으로 켜짐"
+        },
+        "hint": {
+          "en": "Triggered when an external DALI command turns this light on",
+          "ko": "외부 DALI 명령으로 이 조명이 켜질 때 트리거됩니다"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=dimmable-light"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "Command",
+              "ko": "명령어"
+            },
+            "example": "RECALL_MAX_LEVEL"
+          }
+        ],
+        "id": "dimmable-light-external-on"
+      },
+      {
+        "title": {
           "en": "DALI level changed",
           "ko": "DALI 레벨이 변경됨"
         },
@@ -104,6 +162,64 @@
           }
         ],
         "id": "dt8-light-level-changed"
+      },
+      {
+        "title": {
+          "en": "Turned off by external command",
+          "ko": "외부 명령으로 꺼짐"
+        },
+        "hint": {
+          "en": "Triggered when an external DALI command turns this group off",
+          "ko": "외부 DALI 명령으로 이 그룹이 꺼질 때 트리거됩니다"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "Command",
+              "ko": "명령어"
+            },
+            "example": "OFF"
+          }
+        ],
+        "id": "light-group-external-off"
+      },
+      {
+        "title": {
+          "en": "Turned on by external command",
+          "ko": "외부 명령으로 켜짐"
+        },
+        "hint": {
+          "en": "Triggered when an external DALI command turns this group on",
+          "ko": "외부 DALI 명령으로 이 그룹이 켜질 때 트리거됩니다"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=light-group"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "command",
+            "type": "string",
+            "title": {
+              "en": "Command",
+              "ko": "명령어"
+            },
+            "example": "RECALL_MAX_LEVEL"
+          }
+        ],
+        "id": "light-group-external-on"
       },
       {
         "title": {
@@ -3600,6 +3716,7 @@
       },
       "class": "sensor",
       "capabilities": [
+        "onoff",
         "alarm_motion",
         "occupancy_state"
       ],

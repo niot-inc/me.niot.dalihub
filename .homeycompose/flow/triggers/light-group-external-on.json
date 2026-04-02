@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Turned on by external command",
+    "ko": "외부 명령으로 켜짐"
+  },
+  "hint": {
+    "en": "Triggered when an external DALI command turns this group on",
+    "ko": "외부 DALI 명령으로 이 그룹이 켜질 때 트리거됩니다"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=light-group"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "command",
+      "type": "string",
+      "title": {
+        "en": "Command",
+        "ko": "명령어"
+      },
+      "example": "RECALL_MAX_LEVEL"
+    }
+  ]
+}

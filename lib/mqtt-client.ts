@@ -165,6 +165,8 @@ export class DaliMqttClient {
           busId,
           address,
           level: data.level,
+          ...(data.source && { source: data.source }),
+          ...(data.command && { command: data.command }),
         };
         this.emitEvent(event);
       } catch (error) {
@@ -185,6 +187,8 @@ export class DaliMqttClient {
           groupId,
           level: data.level,
           memberCount: data.memberCount,
+          ...(data.source && { source: data.source }),
+          ...(data.command && { command: data.command }),
         };
         this.emitEvent(event);
       } catch (error) {

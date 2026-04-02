@@ -5,6 +5,8 @@ import {
 
 interface DimmableLightDriver extends Homey.Driver {
   triggerLevelChanged(device: Homey.Device, tokens: { level: number }): Promise<void>;
+  triggerExternalOn(device: Homey.Device, tokens: { command: string }): Promise<void>;
+  triggerExternalOff(device: Homey.Device, tokens: { command: string }): Promise<void>;
 }
 
 class DimmableLightDevice extends Homey.Device {
@@ -197,7 +199,7 @@ class DimmableLightDevice extends Homey.Device {
     await this.driver.triggerLevelChanged(this, { level }).catch(this.error);
   }
 
-  async updateLevelFromEvent(level: number) {
+  async updateLevelFromEvent(level: number, source?: string, command?: string) {
     const isOn = level > 0;
     const percent = arcToPercent(level);
     const dimValue = percent / 100;
@@ -207,11 +209,20 @@ class DimmableLightDevice extends Homey.Device {
     await this.setCapabilityValue('dali_level', level).catch(this.error);
 
     this.log('Updated from event:', {
-      isOn, level, percent, dimValue,
+      isOn, level, percent, dimValue, source, command,
     });
 
     // Trigger flow card
     await this.driver.triggerLevelChanged(this, { level }).catch(this.error);
+
+    // Trigger external ON/OFF flow cards
+    if (source === 'external' && command) {
+      if (isOn) {
+        await this.driver.triggerExternalOn(this, { command }).catch(this.error);
+      } else {
+        await this.driver.triggerExternalOff(this, { command }).catch(this.error);
+      }
+    }
   }
 
   async increaseBrightness(): Promise<void> {

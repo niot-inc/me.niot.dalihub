@@ -3,12 +3,16 @@ import { DaliGroup, DaliState } from '../../lib/dali-api';
 
 class LightGroupDriver extends Homey.Driver {
   private levelChangedTrigger!: Homey.FlowCardTriggerDevice;
+  private externalOnTrigger!: Homey.FlowCardTriggerDevice;
+  private externalOffTrigger!: Homey.FlowCardTriggerDevice;
 
   async onInit() {
     this.log('LightGroupDriver has been initialized');
 
     // Register trigger cards
     this.levelChangedTrigger = this.homey.flow.getDeviceTriggerCard('light-group-level-changed');
+    this.externalOnTrigger = this.homey.flow.getDeviceTriggerCard('light-group-external-on');
+    this.externalOffTrigger = this.homey.flow.getDeviceTriggerCard('light-group-external-off');
 
     // Register action cards
     this.homey.flow.getActionCard('light-group-up')
@@ -107,6 +111,14 @@ class LightGroupDriver extends Homey.Driver {
 
   async triggerLevelChanged(device: Homey.Device, tokens: { level: number }) {
     return this.levelChangedTrigger.trigger(device, tokens);
+  }
+
+  async triggerExternalOn(device: Homey.Device, tokens: { command: string }) {
+    return this.externalOnTrigger.trigger(device, tokens);
+  }
+
+  async triggerExternalOff(device: Homey.Device, tokens: { command: string }) {
+    return this.externalOffTrigger.trigger(device, tokens);
   }
 }
 

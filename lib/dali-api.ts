@@ -85,8 +85,8 @@ export interface DaliState {
 }
 
 export type DaliEvent =
-  | { type: 'gear.changed'; busId: number; address: number; level: number }
-  | { type: 'group.changed'; busId: number; groupId: number; level: number; memberCount?: number }
+  | { type: 'gear.changed'; busId: number; address: number; level: number; source?: string; command?: string }
+  | { type: 'group.changed'; busId: number; groupId: number; level: number; memberCount?: number; source?: string; command?: string }
   | { type: 'push-button.event'; busId: number; address: number; instanceIndex: number; eventName: string; eventCode: number }
   | { type: 'occupancy.event'; busId: number; address: number; instanceIndex: number; movement: boolean; occupancy: string; sensorType: string; eventCode: number }
   | { type: 'control-device.lux'; busId: number; address: number; instanceIndex: number; luxValue: number }

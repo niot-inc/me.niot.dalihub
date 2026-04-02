@@ -15,6 +15,10 @@ class OccupancySensorDevice extends Homey.Device {
     this.log('OccupancySensorDevice has been initialized:', this.getName(), `(Bus ${this.busId}, Address ${this.address}, Instance ${this.instanceIndex})`);
 
     // Add capabilities if they don't exist (for existing paired devices)
+    if (!this.hasCapability('onoff')) {
+      await this.addCapability('onoff').catch(this.error);
+      this.log('Added onoff capability');
+    }
     if (!this.hasCapability('alarm_motion')) {
       await this.addCapability('alarm_motion').catch(this.error);
       this.log('Added alarm_motion capability');
@@ -23,6 +27,15 @@ class OccupancySensorDevice extends Homey.Device {
       await this.addCapability('occupancy_state').catch(this.error);
       this.log('Added occupancy_state capability');
     }
+
+    // Default to enabled
+    if (this.getCapabilityValue('onoff') === null) {
+      await this.setCapabilityValue('onoff', true).catch(this.error);
+    }
+
+    this.registerCapabilityListener('onoff', async (value: boolean) => {
+      this.log(`Sensor ${value ? 'enabled' : 'disabled'}`);
+    });
 
     this.occupancyStateChangedFlow = this.homey.flow.getDeviceTriggerCard('occupancy-state-changed');
   }
@@ -47,11 +60,18 @@ class OccupancySensorDevice extends Homey.Device {
     const occupancy = occupancyNames[occupancyBits];
     const sensorType = isMovementSensor ? 'movement' : 'presence';
 
+    this.log(`Occupancy event 0x${eventCode.toString(16)}: ${occupancy}, ${hasMovement ? 'movement' : 'no movement'}, ${sensorType} sensor`);
+
+    // Skip everything when disabled
+    const isEnabled = this.getCapabilityValue('onoff') !== false;
+    if (!isEnabled) {
+      this.log('Sensor disabled, ignoring event');
+      return;
+    }
+
     // Update capabilities
     await this.setCapabilityValue('alarm_motion', hasMovement).catch(this.error);
     await this.setCapabilityValue('occupancy_state', occupancy).catch(this.error);
-
-    this.log(`Occupancy event 0x${eventCode.toString(16)}: ${occupancy}, ${hasMovement ? 'movement' : 'no movement'}, ${sensorType} sensor`);
 
     // Trigger flow with all decoded fields
     await this.occupancyStateChangedFlow.trigger(

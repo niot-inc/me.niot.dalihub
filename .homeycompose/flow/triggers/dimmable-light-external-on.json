@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Turned on by external command",
+    "ko": "외부 명령으로 켜짐"
+  },
+  "hint": {
+    "en": "Triggered when an external DALI command turns this light on",
+    "ko": "외부 DALI 명령으로 이 조명이 켜질 때 트리거됩니다"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=dimmable-light"
+    }
+  ],
+  "tokens": [
+    {
+      "name": "command",
+      "type": "string",
+      "title": {
+        "en": "Command",
+        "ko": "명령어"
+      },
+      "example": "RECALL_MAX_LEVEL"
+    }
+  ]
+}

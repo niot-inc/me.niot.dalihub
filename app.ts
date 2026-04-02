@@ -6,7 +6,7 @@ import { DaliMqttClient, MqttConfig } from './lib/mqtt-client';
 
 interface DaliDevice extends Homey.Device {
   getData(): { busId: number; address?: number; groupId?: number; instanceIndex?: number };
-  updateLevelFromEvent(level: number): Promise<void>;
+  updateLevelFromEvent(level: number, source?: string, command?: string): Promise<void>;
   handleOccupancyEvent?(eventCode: number): Promise<void>;
   handleButtonEvent?(eventCode: number): Promise<void>;
   updateLuxValue?(luxValue: number): Promise<void>;
@@ -190,7 +190,7 @@ class DaliHubApp extends Homey.App {
         devices.forEach((device) => {
           const deviceData = device.getData();
           if (deviceData.busId === event.busId && deviceData.address === address) {
-            device.updateLevelFromEvent(level).catch((err: Error) => {
+            device.updateLevelFromEvent(level, event.source, event.command).catch((err: Error) => {
               this.error('Failed to update device level:', err);
             });
           }
@@ -221,7 +221,7 @@ class DaliHubApp extends Homey.App {
         const deviceData = device.getData();
         if (deviceData.busId === event.busId && deviceData.groupId === groupId) {
           this.log(`  -> Updating device: ${device.getName()}`);
-          device.updateLevelFromEvent(level).catch((err: Error) => {
+          device.updateLevelFromEvent(level, event.source, event.command).catch((err: Error) => {
             this.error('Failed to update group level:', err);
           });
         }
