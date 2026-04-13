@@ -1315,6 +1315,18 @@
       },
       {
         "title": {
+          "en": "Disable all occupancy sensors",
+          "ko": "모든 재실 센서 비활성화"
+        },
+        "titleFormatted": {
+          "en": "Disable all occupancy sensors",
+          "ko": "모든 재실 센서 비활성화"
+        },
+        "args": [],
+        "id": "disable-all-occupancy-sensors"
+      },
+      {
+        "title": {
           "en": "Decrease brightness (DT8)",
           "ko": "밝기 내리기 (DT8)"
         },
@@ -1564,6 +1576,18 @@
           }
         ],
         "id": "dt8-light-up"
+      },
+      {
+        "title": {
+          "en": "Enable all occupancy sensors",
+          "ko": "모든 재실 센서 활성화"
+        },
+        "titleFormatted": {
+          "en": "Enable all occupancy sensors",
+          "ko": "모든 재실 센서 활성화"
+        },
+        "args": [],
+        "id": "enable-all-occupancy-sensors"
       },
       {
         "title": {
@@ -3800,6 +3824,7 @@
       "decimals": 0,
       "getable": true,
       "setable": true,
+      "insights": true,
       "uiComponent": "slider",
       "uiQuickAction": true,
       "icon": "/assets/capability_icons/dali_level.svg"

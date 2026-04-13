@@ -41,6 +41,15 @@ class DaliHubApp extends Homey.App {
     } else {
       this.log('No server URL configured. Please configure the app in settings.');
     }
+
+    // Register flow action cards
+    this.homey.flow.getActionCard('enable-all-occupancy-sensors').registerRunListener(async () => {
+      await this.setAllOccupancySensors(true);
+    });
+
+    this.homey.flow.getActionCard('disable-all-occupancy-sensors').registerRunListener(async () => {
+      await this.setAllOccupancySensors(false);
+    });
   }
 
   async onUninit() {
@@ -332,6 +341,25 @@ class DaliHubApp extends Homey.App {
           });
         }
       });
+    }
+  }
+
+  private async setAllOccupancySensors(enabled: boolean): Promise<void> {
+    const driver = this.homey.drivers.getDrivers()['occupancy-sensor'];
+    if (!driver) {
+      this.log('No occupancy-sensor driver found');
+      return;
+    }
+
+    const devices = driver.getDevices();
+    this.log(`${enabled ? 'Enabling' : 'Disabling'} all occupancy sensors (${devices.length} devices)`);
+
+    for (const device of devices) {
+      try {
+        await device.setCapabilityValue('onoff', enabled);
+      } catch (err) {
+        this.error(`Failed to ${enabled ? 'enable' : 'disable'} ${device.getName()}:`, err);
+      }
     }
   }
 

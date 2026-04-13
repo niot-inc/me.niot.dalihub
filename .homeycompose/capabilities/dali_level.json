@@ -18,6 +18,7 @@
   "decimals": 0,
   "getable": true,
   "setable": true,
+  "insights": true,
   "uiComponent": "slider",
   "uiQuickAction": true,
   "icon": "/assets/capability_icons/dali_level.svg"
