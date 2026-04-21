@@ -35,6 +35,12 @@ class OccupancySensorDevice extends Homey.Device {
 
     this.registerCapabilityListener('onoff', async (value: boolean) => {
       this.log(`Sensor ${value ? 'enabled' : 'disabled'}`);
+      if (!value) {
+        // Reset to vacant when disabled to avoid stale "occupied" state
+        await this.setCapabilityValue('alarm_motion', false).catch(this.error);
+        await this.setCapabilityValue('occupancy_state', 'vacant').catch(this.error);
+        this.log('State reset to vacant on disable');
+      }
     });
 
     this.occupancyStateChangedFlow = this.homey.flow.getDeviceTriggerCard('occupancy-state-changed');
